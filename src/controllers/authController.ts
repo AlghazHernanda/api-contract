@@ -39,6 +39,7 @@ export const loginValidation = [
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     // Check for validation errors
+    //contoh kalo user masukin email yang salah format, akan di eksekusi oleh code ini
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400).json({
@@ -48,6 +49,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    //TypeScript destructuring untuk extract field dari request body
     const { username, email, password }: CreateUserRequest = req.body;
 
     // Create user
