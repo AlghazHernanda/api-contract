@@ -81,7 +81,7 @@ app.use(express.json());
 
 
 // Proxy endpoint
-app.use('/api/movie', movieRoutes);
+app.use('/api/movie_core', movieRoutes);
 
 
 

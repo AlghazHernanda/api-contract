@@ -6,9 +6,15 @@ export interface ModifyMovieTypes {
   poster_path: string;
   budget: number;
   revenue: number;
-  custom_fields: {
-    rating: number;
-    genre: string;
-    language: string;
-  };
+  // custom_fields: {
+  //   rating: number;
+  //   genre: string;
+  //   language: string;
+  // };
+}
+
+export interface ModifyNowPlayingListTypes {
+  id: number;
+  title: string;
+  popularity: number;
 }
