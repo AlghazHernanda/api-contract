@@ -1,79 +1,87 @@
 import express from 'express';
 import cors from 'cors';
-import axios from 'axios';
-import dotenv from 'dotenv';
+// import axios from 'axios';
+// import dotenv from 'dotenv';
+// import { modifyMovieResponse } from './controllers/movieController';
+import movieRoutes from './routes/movieRoutes';
 
 // Load environment variables
-dotenv.config();
+// dotenv.config();
+// const THEMOVIDB_API_KEY = process.env.THEMOVIDB_API_KEY;
+// const THEMOVIDB_BASE_URL = process.env.THEMOVIDB_BASE_URL || 'https://api.themoviedb.org/3';
 
 const app = express();
 const PORT = process.env.PROXY_PORT || 3001;
-const THEMOVIDB_API_KEY = process.env.THEMOVIDB_API_KEY;
-const THEMOVIDB_BASE_URL = process.env.THEMOVIDB_BASE_URL || 'https://api.themoviedb.org/3';
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Custom response interface
-interface ModifiedMovieResponse {
-  id: number;
-  title: string;
-  overview: string;
-  release_date: string;
-  poster_path: string;
-  budget: number;
-  revenue: number;
-  custom_fields: {
-    rating: number;
-    genre: string;
-    language: string;
-  };
-}
+// // Custom response interface 
+// // sudah di pindahkan ke src/types/modifyMovie.ts
+// interface ModifiedMovieResponse {
+//   id: number;
+//   title: string;
+//   overview: string;
+//   release_date: string;
+//   poster_path: string;
+//   budget: number;
+//   revenue: number;
+//   custom_fields: {
+//     rating: number;
+//     genre: string;
+//     language: string;
+//   };
+// }
 
 // Fungsi modifikasi response
-function modifyMovieResponse(originalData: any): ModifiedMovieResponse {
-  return {
-    id: originalData.id,
-    title: originalData.title,
-    overview: originalData.overview,
-    release_date: originalData.release_date,
-    poster_path: originalData.poster_path,
-    budget: originalData.budget,
-    revenue: originalData.revenue,
-    custom_fields: {
-      rating: Math.floor(Math.random() * 10) + 1,
-      genre: "Modified Genre",
-      language: "ID"
-    }
-  };
-}
-
+// sudah di pindahkan ke src/controllers/movieController.ts
+// function modifyMovieResponse(originalData: any): ModifyMovieTypes {
+//   return {
+//     id: originalData.id,
+//     title: originalData.title,
+//     overview: originalData.overview,
+//     release_date: originalData.release_date,
+//     poster_path: originalData.poster_path,
+//     budget: originalData.budget,
+//     revenue: originalData.revenue,
+//     custom_fields: {
+//       rating: Math.floor(Math.random() * 10) + 1,
+//       genre: "Modified Genre",
+//       language: "ID"
+//     }
+//   };
+// }
 
 
 // Proxy endpoint
-app.get('/movie_core/:id', async (req, res) => {
-  try {
-    const movieId = req.params.id;
+// sudah di pindahkan ke src/routes/movieController lewat src/routes/movieRoutes.ts
+// app.get('/movie_core/:id', async (req, res) => {
+//   try {
+//     const movieId = req.params.id;
     
-    // Hit third-party API
-    const response = await axios.get(`${THEMOVIDB_BASE_URL}/movie/${movieId}`, {
-      headers: {
-        'Authorization': `Bearer ${THEMOVIDB_API_KEY}`,
-        'accept': 'application/json'
-      }
-    });
+//     // Hit third-party API
+//     const response = await axios.get(`${THEMOVIDB_BASE_URL}/movie/${movieId}`, {
+//       headers: {
+//         'Authorization': `Bearer ${THEMOVIDB_API_KEY}`,
+//         'accept': 'application/json'
+//       }
+//     });
     
-    // Modifikasi response
-    const modifiedData = modifyMovieResponse(response.data);
+//     // Modifikasi response
+//     const modifiedData = modifyMovieResponse(response.data);
     
-    res.json(modifiedData);
-  } catch (error) {
-    console.error('Error fetching movie:', error);
-    res.status(500).json({ error: 'Failed to fetch movie data' });
-  }
-});
+//     res.json(modifiedData);
+//   } catch (error) {
+//     console.error('Error fetching movie:', error);
+//     res.status(500).json({ error: 'Failed to fetch movie data' });
+//   }
+// });
 
+
+// Proxy endpoint
+app.use('/api/movie', movieRoutes);
 
 
 
