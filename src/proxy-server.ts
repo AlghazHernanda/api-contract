@@ -1,0 +1,88 @@
+import express from 'express';
+import cors from 'cors';
+import axios from 'axios';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PROXY_PORT || 3001;
+const THEMOVIDB_API_KEY = process.env.THEMOVIDB_API_KEY;
+const THEMOVIDB_BASE_URL = process.env.THEMOVIDB_BASE_URL || 'https://api.themoviedb.org/3';
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Custom response interface
+interface ModifiedMovieResponse {
+  id: number;
+  title: string;
+  overview: string;
+  release_date: string;
+  poster_path: string;
+  budget: number;
+  revenue: number;
+  custom_fields: {
+    rating: number;
+    genre: string;
+    language: string;
+  };
+}
+
+// Fungsi modifikasi response
+function modifyMovieResponse(originalData: any): ModifiedMovieResponse {
+  return {
+    id: originalData.id,
+    title: originalData.title,
+    overview: originalData.overview,
+    release_date: originalData.release_date,
+    poster_path: originalData.poster_path,
+    budget: originalData.budget,
+    revenue: originalData.revenue,
+    custom_fields: {
+      rating: Math.floor(Math.random() * 10) + 1,
+      genre: "Modified Genre",
+      language: "ID"
+    }
+  };
+}
+
+
+
+// Proxy endpoint
+app.get('/movie_core/:id', async (req, res) => {
+  try {
+    const movieId = req.params.id;
+    
+    // Hit third-party API
+    const response = await axios.get(`${THEMOVIDB_BASE_URL}/movie/${movieId}`, {
+      headers: {
+        'Authorization': `Bearer ${THEMOVIDB_API_KEY}`,
+        'accept': 'application/json'
+      }
+    });
+    
+    // Modifikasi response
+    const modifiedData = modifyMovieResponse(response.data);
+    
+    res.json(modifiedData);
+  } catch (error) {
+    console.error('Error fetching movie:', error);
+    res.status(500).json({ error: 'Failed to fetch movie data' });
+  }
+});
+
+
+
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', service: 'API Proxy' });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`API Proxy running on port ${PORT}`);
+});
