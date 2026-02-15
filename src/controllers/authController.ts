@@ -22,7 +22,13 @@ export const registerValidation = [
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long')
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Password must contain at least one lowercase letter, one uppercase letter, and one number')
+    .withMessage('Password must contain at least one lowercase letter, one uppercase letter, and one number'),
+
+  body('phone')
+    .isLength({ min: 10, max: 15 })
+    .withMessage('Phone number must be between 10 and 15 digits')
+    .matches(/^[0-9]+$/)
+    .withMessage('Phone number can only contain numbers')
 ];
 
 export const loginValidation = [
@@ -50,10 +56,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     }
 
     //TypeScript destructuring untuk extract field dari request body
-    const { username, email, password }: CreateUserRequest = req.body;
+    const { username, email, password, phone }: CreateUserRequest = req.body;
 
     // Create user
-    const user = await UserModel.create({ username, email, password });
+    const user = await UserModel.create({ username, email, password, phone });
 
     // Generate token
     const token = generateToken(user);
@@ -128,9 +134,12 @@ export const getProfile = async (req: any, res: Response): Promise<void> => {
       return;
     }
 
-    const { password: _, ...userWithoutPassword } = user;
+    ////code untuk exclude nomor telpon juga
+    //const { password, phone, ...userResponseData } = user;
+    const { password: _,  ...userWithoutPassword } = user;
 
     res.status(200).json({
+      //userResponseData  ////kalo mau exclude nomor telpon juga
       user: userWithoutPassword
     });
   } catch (error: any) {

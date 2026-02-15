@@ -3,19 +3,26 @@ import { User, CreateUserRequest } from '../types/user';
 import { hashPassword } from '../utils/password';
 
 export class UserModel {
+  //Omit utility untuk exclude password field
   static async create(userData: CreateUserRequest): Promise<Omit<User, 'password'>> {
-    const { username, email, password } = userData;
+
+    //Extract semua field dari CreateUserRequest object
+    //TypeScript destructuring untuk assign ke variable
+    const { username, email, password, phone } = userData;
     
     // Hash the password
     const hashedPassword = await hashPassword(password);
     
+    //Placeholders (?) untuk safe parameter binding
     const query = `
-      INSERT INTO users (username, email, password)
-      VALUES (?, ?, ?)
+      INSERT INTO users (username, email, password, phone)
+      VALUES (?, ?, ?, ?)
     `;
     
     try {
-      const [result] = await pool.execute(query, [username, email, hashedPassword]);
+      const [result] = await pool.execute(query, [username, email, hashedPassword, phone]);
+      //insertId adalah ID auto-increment dari user baru
+      //Type assertion as any untuk mengakses insertId
       const insertId = (result as any).insertId;
       
       // Return the created user without password
@@ -24,6 +31,7 @@ export class UserModel {
         throw new Error('Failed to retrieve created user');
       }
       
+      //Object destructuring dengan rest operator ... 
       const { password: _, ...userWithoutPassword } = user;
       return userWithoutPassword;
     } catch (error: any) {

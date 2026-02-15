@@ -5,12 +5,14 @@ export interface User {
   password: string;
   created_at: Date;
   updated_at: Date;
+  phone: string;
 }
 
 export interface CreateUserRequest {
   username: string;
   email: string;
   password: string;
+  phone: string;
 }
 
 export interface LoginRequest {
