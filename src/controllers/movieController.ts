@@ -2,6 +2,7 @@ import { ModifyMovieTypes, ModifyNowPlayingListTypes } from '../types/modifyMovi
 import dotenv from 'dotenv';
 import axios from 'axios';
 import { Request, Response } from 'express';
+import { randomUUID } from 'node:crypto';
 
 
 dotenv.config();
@@ -49,7 +50,10 @@ export const modifyMovieResponseHandler= async (req: Request, res: Response): Pr
     // Modifikasi response
     const modifiedData = modifyMovieResponse(response.data);
     
-    res.json(modifiedData);
+    res.status(200).json({
+      requestId: randomUUID(), // generate unique request ID
+      data: modifiedData
+    });
   } catch (error) {
     console.error('Error fetching movie:', error);
     res.status(500).json({ error: 'Failed to fetch movie data' });
@@ -69,7 +73,10 @@ export const modifyNowPlayingListResponseHandler = async (req: Request, res: Res
     // Modifikasi response
     const modifiedList = response.data.results.map((movie: any) => modifyNowPlayingListResponse(movie));
     
-    res.json(modifiedList);
+    res.status(200).json({
+      requestId: randomUUID(), // generate unique request ID
+      data: modifiedList
+    });
   } catch (error) {
     console.error('Error fetching now playing movies:', error);
     res.status(500).json({ error: 'Failed to fetch now playing movies' });
