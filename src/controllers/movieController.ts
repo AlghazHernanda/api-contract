@@ -62,7 +62,7 @@ export const modifyMovieResponseHandler= async (req: Request, res: Response): Pr
 
 export const modifyNowPlayingListResponseHandler = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Hit third-party API
+    // Hit third-party API now playing
     const response = await axios.get(`${THEMOVIDB_BASE_URL}/movie/now_playing`, {
       headers: {
         'Authorization': `Bearer ${THEMOVIDB_API_KEY}`, 
