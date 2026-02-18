@@ -80,6 +80,29 @@ async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
   }
 }
 
+// Function to get favorite movies from database
+export const getFavoriteMoviesHandler = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const connection = await pool.getConnection();
+    
+    // Get movies ordered by favorite count (descending)
+    const [favoriteMovies] = await connection.query(
+      'SELECT id, title, budget, revenue, favorite, created_at, updated_at FROM movies WHERE deleted_at IS NULL ORDER BY favorite DESC, created_at DESC'
+    );
+    
+    res.status(200).json({
+      requestId: randomUUID(),
+      data: favoriteMovies,
+      count: Array.isArray(favoriteMovies) ? favoriteMovies.length : 0
+    });
+    
+    connection.release();
+  } catch (error) {
+    console.error('Error fetching favorite movies:', error);
+    res.status(500).json({ error: 'Failed to fetch favorite movies' });
+  }
+}
+
 export const modifyMovieResponseHandler= async (req: Request, res: Response): Promise<void> => {
   try {
     const movieId = req.params.id;
@@ -135,3 +158,5 @@ export const modifyNowPlayingListResponseHandler = async (req: Request, res: Res
     res.status(500).json({ error: 'Failed to fetch now playing movies' });
   }   
 }
+
+

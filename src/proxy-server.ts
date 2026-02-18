@@ -113,8 +113,10 @@ async function startProxyServer() {
       console.log('\n📋 Available endpoints:');
       console.log('  GET  /api/movie_core/detail/:id - Get movie details and save to DB');
       console.log('  GET  /api/movie_core/now_playing - Get now playing movies');
+      console.log('  GET  /api/movie_core/showFavoriteMovies - Get movies ordered by favorite count');
       console.log('  GET  /health - Health check');
       console.log('\n🔗 Movie data will be automatically saved to database when accessing detail endpoint');
+      console.log('📈 Favorite count increments each time a movie detail is accessed');
     });
   } catch (error) {
     console.error('Failed to start proxy server:', error);
