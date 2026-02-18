@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 import { Request, Response } from 'express';
 import { randomUUID } from 'node:crypto';
+import { pool } from '../utils/database';
 
 
 dotenv.config();
@@ -35,6 +36,40 @@ export function modifyNowPlayingListResponse(originalData: any): ModifyNowPlayin
   };
 }
 
+// Function to save movie data to database
+async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
+  try {
+    const connection = await pool.getConnection();
+    
+    // Check if movie already exists
+    const [existingMovies] = await connection.query(
+      'SELECT id FROM movies WHERE id = ?',
+      [movieData.id]
+    );
+    
+    if (Array.isArray(existingMovies) && existingMovies.length > 0) {
+      // Update existing movie
+      await connection.query(
+        'UPDATE movies SET title = ?, budget = ?, revenue = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+        [movieData.title, movieData.budget, movieData.revenue, movieData.id]
+      );
+      console.log(`Movie with ID ${movieData.id} updated in database`);
+    } else {
+      // Insert new movie
+      await connection.query(
+        'INSERT INTO movies (id, title, budget, revenue) VALUES (?, ?, ?, ?)',
+        [movieData.id, movieData.title, movieData.budget, movieData.revenue]
+      );
+      console.log(`Movie with ID ${movieData.id} saved to database`);
+    }
+    
+    connection.release();
+  } catch (error) {
+    console.error('Error saving movie to database:', error);
+    throw error;
+  }
+}
+
 export const modifyMovieResponseHandler= async (req: Request, res: Response): Promise<void> => {
   try {
     const movieId = req.params.id;
@@ -49,6 +84,14 @@ export const modifyMovieResponseHandler= async (req: Request, res: Response): Pr
     
     // Modifikasi response
     const modifiedData = modifyMovieResponse(response.data);
+    
+    // Save to database
+    try {
+      await saveMovieToDatabase(modifiedData);
+    } catch (dbError) {
+      console.error('Failed to save movie to database:', dbError);
+      // Continue with response even if DB save fails
+    }
     
     res.status(200).json({
       requestId: randomUUID(), // generate unique request ID

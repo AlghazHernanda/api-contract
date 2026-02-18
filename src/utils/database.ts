@@ -84,8 +84,21 @@ export async function initializeDatabase(): Promise<void> {
       )
     `);
     
+    // Create movies table
+    await dbConnection.query(`
+      CREATE TABLE IF NOT EXISTS movies (
+        id INT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        budget BIGINT DEFAULT 0,
+        revenue BIGINT DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY unique_movie_id (id)
+      )
+    `);
+    
     dbConnection.release();
-    console.log('Users table created successfully');
+    console.log('Users and Movies tables created successfully');
     console.log('Database initialized successfully');
   } catch (error) {
     console.error('Database initialization failed:', error);

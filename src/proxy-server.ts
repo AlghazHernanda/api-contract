@@ -1,12 +1,13 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 // import axios from 'axios';
-// import dotenv from 'dotenv';
 // import { modifyMovieResponse } from './controllers/movieController';
 import movieRoutes from './routes/movieRoutes';
+import { testConnection, initializeDatabase } from './utils/database';
 
 // Load environment variables
-// dotenv.config();
+dotenv.config();
 // const THEMOVIDB_API_KEY = process.env.THEMOVIDB_API_KEY;
 // const THEMOVIDB_BASE_URL = process.env.THEMOVIDB_BASE_URL || 'https://api.themoviedb.org/3';
 
@@ -91,6 +92,34 @@ app.get('/health', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`API Proxy running on port ${PORT}`);
-});
+async function startProxyServer() {
+  try {
+    // Try to connect to database
+    console.log('Attempting to connect to database...');
+    const dbConnected = await testConnection();
+    
+    if (dbConnected) {
+      console.log('Database connection successful!');
+      // Initialize database
+      await initializeDatabase();
+    } else {
+      console.log('⚠️  Database connection failed. Movie data will not be saved to database.');
+      console.log('   Please check your MariaDB configuration in .env file');
+    }
+
+    // Start listening
+    app.listen(PORT, () => {
+      console.log(`\n🚀 API Proxy running on port ${PORT}`);
+      console.log('\n📋 Available endpoints:');
+      console.log('  GET  /api/movie_core/detail/:id - Get movie details and save to DB');
+      console.log('  GET  /api/movie_core/now_playing - Get now playing movies');
+      console.log('  GET  /health - Health check');
+      console.log('\n🔗 Movie data will be automatically saved to database when accessing detail endpoint');
+    });
+  } catch (error) {
+    console.error('Failed to start proxy server:', error);
+    process.exit(1);
+  }
+}
+
+startProxyServer();
