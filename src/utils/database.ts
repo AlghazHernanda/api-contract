@@ -91,11 +91,37 @@ export async function initializeDatabase(): Promise<void> {
         title VARCHAR(255) NOT NULL,
         budget BIGINT DEFAULT 0,
         revenue BIGINT DEFAULT 0,
+        favorite INT DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP NULL DEFAULT NULL,
         UNIQUE KEY unique_movie_id (id)
       )
     `);
+    
+    // Add deleted_at column if it doesn't exist (for existing tables)
+    try {
+      await dbConnection.query(`
+        ALTER TABLE movies
+        ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP NULL DEFAULT NULL
+      `);
+      console.log('deleted_at column added to movies table (or already exists)');
+    } catch (error) {
+      // Column might already exist, ignore error
+      console.log('deleted_at column already exists in movies table');
+    }
+    
+    // Add favorite column if it doesn't exist (for existing tables)
+    try {
+      await dbConnection.query(`
+        ALTER TABLE movies
+        ADD COLUMN IF NOT EXISTS favorite INT DEFAULT 0
+      `);
+      console.log('favorite column added to movies table (or already exists)');
+    } catch (error) {
+      // Column might already exist, ignore error
+      console.log('favorite column already exists in movies table');
+    }
     
     dbConnection.release();
     console.log('Users and Movies tables created successfully');

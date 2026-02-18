@@ -42,25 +42,35 @@ async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
     const connection = await pool.getConnection();
     
     // Check if movie already exists
+    //object existingMovies jika ada memiliki value : [{"id":1373198,"favorite":3}]
     const [existingMovies] = await connection.query(
-      'SELECT id FROM movies WHERE id = ?',
+      'SELECT id, favorite FROM movies WHERE id = ?',
       [movieData.id]
     );
     
+    //console.log(`DEBUG: existing movies ${JSON.stringify(existingMovies)}`);
+    
     if (Array.isArray(existingMovies) && existingMovies.length > 0) {
-      // Update existing movie
+      const currentFavorite = (existingMovies[0] as any).favorite || 0;
+      const newFavorite = currentFavorite + 1;
+      
+      console.log(`DEBUG: Movie ${movieData.id} exists. Current favorite: ${currentFavorite}`);
+      
+      // Update existing movie and increment favorite count
       await connection.query(
-        'UPDATE movies SET title = ?, budget = ?, revenue = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+        'UPDATE movies SET title = ?, budget = ?, revenue = ?, favorite = favorite + 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
         [movieData.title, movieData.budget, movieData.revenue, movieData.id]
       );
-      console.log(`Movie with ID ${movieData.id} updated in database`);
+      console.log(`Movie with ID ${movieData.id} updated. Favorite count: ${currentFavorite} → ${newFavorite}`);
     } else {
-      // Insert new movie
+      console.log(`DEBUG: Movie ${movieData.id} is new. Setting favorite to 1`);
+      
+      // Insert new movie with favorite count = 1
       await connection.query(
-        'INSERT INTO movies (id, title, budget, revenue) VALUES (?, ?, ?, ?)',
+        'INSERT INTO movies (id, title, budget, revenue, favorite) VALUES (?, ?, ?, ?, 1)',
         [movieData.id, movieData.title, movieData.budget, movieData.revenue]
       );
-      console.log(`Movie with ID ${movieData.id} saved to database`);
+      console.log(`Movie with ID ${movieData.id} saved to database. Initial favorite count: 1`);
     }
     
     connection.release();
