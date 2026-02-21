@@ -32,7 +32,10 @@ export function modifyNowPlayingListResponse(originalData: any): ModifyNowPlayin
   return {
     id: originalData.id,
     title: originalData.title,
-    popularity: originalData.popularity
+    popularity: originalData.popularity,
+    poster_path: originalData.poster_path,
+    backdrop_path: originalData.backdrop_path,
+    release_date: originalData.release_date
   };
 }
 
