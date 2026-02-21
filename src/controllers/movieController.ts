@@ -19,7 +19,11 @@ export function modifyMovieResponse(originalData: any): ModifyMovieTypes {
     release_date: originalData.release_date,
     poster_path: originalData.poster_path,
     budget: originalData.budget,
-    revenue: originalData.revenue
+    revenue: originalData.revenue,
+    backdrop_path: originalData.backdrop_path,
+    homepage: originalData.homepage,
+    tagline: originalData.tagline
+    
     // custom_fields: {
     //   rating: Math.floor(Math.random() * 10) + 1,
     //   genre: "Modified Genre",

@@ -6,6 +6,10 @@ export interface ModifyMovieTypes {
   poster_path: string;
   budget: number;
   revenue: number;
+  backdrop_path?: string;
+  homepage?: string;
+  tagline?: string;
+
   // custom_fields: {
   //   rating: number;
   //   genre: string;
