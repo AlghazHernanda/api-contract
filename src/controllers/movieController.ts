@@ -141,7 +141,7 @@ export const getFavoriteMoviesHandler = async (req: Request, res: Response): Pro
   try {
     const connection = await pool.getConnection();
     
-    // Get movies ordered by favorite count (descending)
+    // Get movies ordered by favorite count (descending) and deleted_at is null
     const [favoriteMovies] = await connection.query(
       'SELECT id, title, budget, revenue, favorite, created_at, updated_at FROM movies WHERE deleted_at IS NULL ORDER BY favorite DESC, created_at DESC'
     );
