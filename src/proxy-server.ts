@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 // import { modifyMovieResponse } from './controllers/movieController';
 import movieRoutes from './routes/movieRoutes';
 import { testConnection, initializeDatabase } from './utils/database';
+import tvListRoutes from './routes/tvListRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -83,6 +84,7 @@ app.use(express.json());
 
 // Proxy endpoint
 app.use('/api/movie_core', movieRoutes);
+app.use('/api/tv_series_core', tvListRoutes);
 
 
 
@@ -114,6 +116,7 @@ async function startProxyServer() {
       console.log('  GET  /api/movie_core/detail/:id - Get movie details and save to DB');
       console.log('  GET  /api/movie_core/now_playing - Get now playing movies');
       console.log('  GET  /api/movie_core/showFavoriteMovies - Get movies ordered by favorite count');
+      console.log('  GET  /api/tv_series_core/airing_today - Get TV series airing today');
       console.log('  GET  /health - Health check');
       console.log('\n🔗 Movie data will be automatically saved to database when accessing detail endpoint');
       console.log('📈 Favorite count increments each time a movie detail is accessed');
