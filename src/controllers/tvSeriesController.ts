@@ -19,6 +19,7 @@ export function modifyTvSeriesListResponse(originalData: any): tvSeriesListTypes
   };
 }
 
+//wrapper tvSeries list
 export const tvSeriesListResponseHandler = async (req: Request, res: Response): Promise<void> => {
     try {
      const response = await axios.get(`${THEMOVIDB_BASE_URL}/tv/airing_today`, {
