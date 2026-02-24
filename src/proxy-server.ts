@@ -62,7 +62,7 @@ app.use(express.json());
 // app.get('/movie_core/:id', async (req, res) => {
 //   try {
 //     const movieId = req.params.id;
-    
+
 //     // Hit third-party API
 //     const response = await axios.get(`${THEMOVIDB_BASE_URL}/movie/${movieId}`, {
 //       headers: {
@@ -70,10 +70,10 @@ app.use(express.json());
 //         'accept': 'application/json'
 //       }
 //     });
-    
+
 //     // Modifikasi response
 //     const modifiedData = modifyMovieResponse(response.data);
-    
+
 //     res.json(modifiedData);
 //   } catch (error) {
 //     console.error('Error fetching movie:', error);
@@ -99,7 +99,7 @@ async function startProxyServer() {
     // Try to connect to database
     console.log('Attempting to connect to database...');
     const dbConnected = await testConnection();
-    
+
     if (dbConnected) {
       console.log('Database connection successful!');
       // Initialize database
@@ -117,6 +117,7 @@ async function startProxyServer() {
       console.log('  GET  /api/movie_core/now_playing - Get now playing movies');
       console.log('  GET  /api/movie_core/showFavoriteMovies - Get movies ordered by favorite count');
       console.log('  GET  /api/tv_series_core/airing_today - Get TV series airing today');
+      console.log('  GET  /api/tv_series_core/detail/:id - Get TV series details');
       console.log('  GET  /health - Health check');
       console.log('\n🔗 Movie data will be automatically saved to database when accessing detail endpoint');
       console.log('📈 Favorite count increments each time a movie detail is accessed');
