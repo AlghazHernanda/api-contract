@@ -53,6 +53,7 @@ export const tvSeriesListResponseHandler = async (req: Request, res: Response): 
     }
 }
 
+//tv series detail
 export const tvSeriesDetailResponseHandler = async (req: Request, res: Response): Promise<void> => {
     try {
         const tvSeriesId = req.params.id;
