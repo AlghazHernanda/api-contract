@@ -19,6 +19,7 @@ export function modifyTvSeriesListResponse(originalData: any): tvSeriesListTypes
     };
 }
 
+//mapping data
 export function modifyTvSeriesDetailResponse(originalData: any): tvSeriesDetailTypes {
     return {
         id: originalData.id,
