@@ -8,6 +8,7 @@ dotenv.config();
 const THEMOVIDB_API_KEY = process.env.THEMOVIDB_API_KEY;
 const THEMOVIDB_BASE_URL = process.env.THEMOVIDB_BASE_URL || 'https://api.themoviedb.org/3';
 
+//mapping data for list tv
 export function modifyTvSeriesListResponse(originalData: any): tvSeriesListTypes {
     return {
         id: originalData.id,
