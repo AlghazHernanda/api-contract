@@ -5,6 +5,7 @@ import { randomUUID } from 'crypto';
 import { Request, Response } from 'express';
 dotenv.config();
 
+//get env key
 const THEMOVIDB_API_KEY = process.env.THEMOVIDB_API_KEY;
 const THEMOVIDB_BASE_URL = process.env.THEMOVIDB_BASE_URL || 'https://api.themoviedb.org/3';
 
