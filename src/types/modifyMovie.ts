@@ -17,6 +17,7 @@ export interface ModifyMovieTypes {
   // };
 }
 
+//interface untuk list now playing
 export interface ModifyNowPlayingListTypes {
   id: number;
   title: string;
