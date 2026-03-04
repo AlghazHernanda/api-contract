@@ -24,8 +24,8 @@ app.use('/api/auth', authRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'OK', 
+  res.status(200).json({
+    status: 'OK',
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });
@@ -33,7 +33,7 @@ app.get('/health', (req, res) => {
 
 // Root endpoint
 app.get('/', (req, res) => {
-  res.status(200).json({ 
+  res.status(200).json({
     message: 'Auth API Server is running',
     version: '1.0.0',
     endpoints: {
@@ -61,7 +61,7 @@ async function startServer() {
     // Try to connect to database, but don't exit if it fails
     console.log('Attempting to connect to database...');
     const dbConnected = await testConnection();
-    
+
     if (dbConnected) {
       console.log('Database connection successful!');
       // Initialize database
