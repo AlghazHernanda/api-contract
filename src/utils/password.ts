@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 
 const SALT_ROUNDS = 12;
 
+//hashing password with bcrypt
 export async function hashPassword(password: string): Promise<string> {
   return await bcrypt.hash(password, SALT_ROUNDS);
 }
