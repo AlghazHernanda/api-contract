@@ -26,3 +26,16 @@ export interface ModifyNowPlayingListTypes {
   backdrop_path?: string;
   release_date?: string;
 }
+
+export interface MovieCreditTypes {
+  id: number;
+  cast: Array<{
+    id: number;
+    cast_id: number;
+    character: string;
+    name: string;
+    profile_path: string;
+    gender: number;
+    known_for_department: string;
+  }>;
+}

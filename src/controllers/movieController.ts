@@ -1,4 +1,4 @@
-import { ModifyMovieTypes, ModifyNowPlayingListTypes } from '../types/modifyMovie';
+import { ModifyMovieTypes, ModifyNowPlayingListTypes, MovieCreditTypes } from '../types/modifyMovie';
 import dotenv from 'dotenv';
 import axios from 'axios';
 import { Request, Response } from 'express';
@@ -40,6 +40,21 @@ export function modifyNowPlayingListResponse(originalData: any): ModifyNowPlayin
     poster_path: originalData.poster_path,
     backdrop_path: originalData.backdrop_path,
     release_date: originalData.release_date
+  };
+}
+
+export function modifyMovieCreditResponse(originalData: any): MovieCreditTypes {
+  return {
+    id: originalData.id,
+    cast: originalData.cast.map((castMember: any) => ({
+      id: castMember.id,
+      cast_id: castMember.cast_id,
+      character: castMember.character,
+      name: castMember.name,
+      profile_path: castMember.profile_path,
+      gender: castMember.gender,
+      known_for_department: castMember.known_for_department
+    }))
   };
 }
 
@@ -193,6 +208,30 @@ export const getSearchMoviesHandler = async (req: Request, res: Response): Promi
   } catch (error) {
     console.error('Error fetching search movies:', error);
     res.status(500).json({ error: 'Failed to fetch search movies' });
+  }
+}
+
+export const modifyMovieCreditResponseHandler = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const movieId = req.params.id;
+    const response = await axios.get(`${THEMOVIDB_BASE_URL}/movie/${movieId}/credits`, {
+      headers: {
+        'Authorization': `Bearer ${THEMOVIDB_API_KEY}`,
+        'accept': 'application/json'
+      }
+    });
+
+    const modifiedData = modifyMovieCreditResponse(response.data);
+    console.log(modifiedData);
+
+
+    res.status(200).json({
+      requestId: randomUUID(),
+      data: modifiedData
+    });
+  } catch (error) {
+    console.error('Error fetching movie credits:', error);
+    res.status(500).json({ error: 'Failed to fetch movie credits' });
   }
 }
 
