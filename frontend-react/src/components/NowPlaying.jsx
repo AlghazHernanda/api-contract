@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getNowPlayingMovies, getPosterUrl, getBackdropUrl, formatDate } from '../services/movieService';
+import { useNavigate } from 'react-router-dom';
 
 const NowPlaying = () => {
   const [movies, setMovies] = useState([]);
@@ -25,8 +26,11 @@ const NowPlaying = () => {
     fetchMovies();
   }, []);
 
+  const navigate = useNavigate();
+  
   const handleMovieClick = (movie) => {
-    setSelectedMovie(movie);
+    // Navigate to movie detail page
+    navigate(`/movie/${movie.id}`);
   };
 
   const closeModal = () => {

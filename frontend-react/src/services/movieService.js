@@ -36,6 +36,28 @@ export const getBackdropUrl = (backdropPath, size = 'w1280') => {
   return `https://image.tmdb.org/t/p/${size}${backdropPath}`;
 };
 
+// Fetch movie details
+export const getMovieDetails = async (movieId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/movie_core/detail/${movieId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching movie details:', error);
+    throw error;
+  }
+};
+
 // Format release date
 export const formatDate = (dateString) => {
   if (!dateString) return 'Unknown';
