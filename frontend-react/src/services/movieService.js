@@ -58,6 +58,34 @@ export const getMovieDetails = async (movieId) => {
   }
 };
 
+// Fetch movie credits
+export const getMovieCredits = async (movieId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/movie_core/detail/${movieId}/credits`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching movie credits:', error);
+    throw error;
+  }
+};
+
+// Get profile image URL
+export const getProfileUrl = (profilePath, size = 'w185') => {
+  if (!profilePath) return 'https://via.placeholder.com/185x278?text=No+Image';
+  return `https://image.tmdb.org/t/p/${size}${profilePath}`;
+};
+
 // Format release date
 export const formatDate = (dateString) => {
   if (!dateString) return 'Unknown';

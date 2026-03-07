@@ -1,20 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getMovieDetails, getPosterUrl, getBackdropUrl, formatDate } from '../services/movieService';
+import { getMovieDetails, getMovieCredits, getPosterUrl, getBackdropUrl, getProfileUrl, formatDate } from '../services/movieService';
 
 const MovieDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
+  const [credits, setCredits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchMovieDetails = async () => {
+    const fetchMovieData = async () => {
       try {
         setLoading(true);
-        const response = await getMovieDetails(id);
-        setMovie(response.data);
+        
+        // Fetch movie details and credits in parallel
+        const [movieResponse, creditsResponse] = await Promise.all([
+          getMovieDetails(id),
+          getMovieCredits(id)
+        ]);
+        
+        setMovie(movieResponse.data);
+        setCredits(creditsResponse.data);
         setError(null);
       } catch (err) {
         setError('Failed to fetch movie details. Please try again later.');
@@ -25,7 +33,7 @@ const MovieDetail = () => {
     };
 
     if (id) {
-      fetchMovieDetails();
+      fetchMovieData();
     }
   }, [id]);
 
@@ -345,6 +353,84 @@ const MovieDetail = () => {
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Cast Section */}
+        {credits && credits.cast && credits.cast.length > 0 && (
+          <div style={{ 
+            marginTop: '2rem',
+            backgroundColor: '#fff',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
+            border: '1px solid #eaeaea'
+          }}>
+            <div style={{ 
+              padding: '1.5rem 2rem', 
+              borderBottom: '1px solid #eaeaea',
+              backgroundColor: '#f8f9fa'
+            }}>
+              <h2 style={{ 
+                margin: 0, 
+                fontSize: '1.5rem',
+                color: '#333'
+              }}>Cast</h2>
+            </div>
+            
+            <div style={{ 
+              padding: '1.5rem',
+              overflowX: 'auto'
+            }}>
+              <div style={{ 
+                display: 'flex',
+                gap: '1.5rem',
+                paddingBottom: '1rem'
+              }}>
+                {credits.cast.slice(0, 10).map((castMember) => (
+                  <div key={castMember.id} style={{ 
+                    flex: '0 0 140px',
+                    textAlign: 'center'
+                  }}>
+                    <img 
+                      src={getProfileUrl(castMember.profile_path)} 
+                      alt={castMember.name}
+                      style={{
+                        width: '140px',
+                        height: '210px',
+                        objectFit: 'cover',
+                        borderRadius: '8px',
+                        marginBottom: '0.75rem',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+                      }}
+                    />
+                    <h4 style={{ 
+                      margin: '0 0 0.25rem 0', 
+                      fontSize: '0.95rem',
+                      fontWeight: '600',
+                      color: '#333',
+                      lineHeight: '1.3'
+                    }}>{castMember.name}</h4>
+                    <p style={{ 
+                      margin: 0, 
+                      fontSize: '0.85rem',
+                      color: '#666',
+                      fontStyle: 'italic'
+                    }}>{castMember.character}</p>
+                  </div>
+                ))}
+              </div>
+              {credits.cast.length > 10 && (
+                <div style={{ 
+                  textAlign: 'center',
+                  marginTop: '1rem',
+                  color: '#666',
+                  fontSize: '0.9rem'
+                }}>
+                  and {credits.cast.length - 10} more cast members
+                </div>
+              )}
             </div>
           </div>
         )}
