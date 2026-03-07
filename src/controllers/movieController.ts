@@ -23,7 +23,7 @@ export function modifyMovieResponse(originalData: any): ModifyMovieTypes {
     backdrop_path: originalData.backdrop_path,
     homepage: originalData.homepage,
     tagline: originalData.tagline
-    
+
     // custom_fields: {
     //   rating: Math.floor(Math.random() * 10) + 1,
     //   genre: "Modified Genre",
@@ -47,22 +47,22 @@ export function modifyNowPlayingListResponse(originalData: any): ModifyNowPlayin
 async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
   try {
     const connection = await pool.getConnection();
-    
+
     // Check if movie already exists
     //object existingMovies jika ada memiliki value : [{"id":1373198,"favorite":3}]
     const [existingMovies] = await connection.query(
       'SELECT id, favorite FROM movies WHERE id = ?',
       [movieData.id]
     );
-    
+
     //console.log(`DEBUG: existing movies ${JSON.stringify(existingMovies)}`);
-    
+
     if (Array.isArray(existingMovies) && existingMovies.length > 0) {
       const currentFavorite = (existingMovies[0] as any).favorite || 0;
       const newFavorite = currentFavorite + 1;
-      
+
       console.log(`DEBUG: Movie ${movieData.id} exists. Current favorite: ${currentFavorite}`);
-      
+
       // Update existing movie and increment favorite count
       await connection.query(
         'UPDATE movies SET title = ?, budget = ?, revenue = ?, favorite = favorite + 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
@@ -71,7 +71,7 @@ async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
       console.log(`Movie with ID ${movieData.id} updated. Favorite count: ${currentFavorite} → ${newFavorite}`);
     } else {
       console.log(`DEBUG: Movie ${movieData.id} is new. Setting favorite to 1`);
-      
+
       // Insert new movie with favorite count = 1
       await connection.query(
         'INSERT INTO movies (id, title, budget, revenue, favorite) VALUES (?, ?, ?, ?, 1)',
@@ -79,7 +79,7 @@ async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
       );
       console.log(`Movie with ID ${movieData.id} saved to database. Initial favorite count: 1`);
     }
-    
+
     connection.release();
   } catch (error) {
     console.error('Error saving movie to database:', error);
@@ -87,10 +87,10 @@ async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
   }
 }
 
-export const modifyMovieResponseHandler= async (req: Request, res: Response): Promise<void> => {
+export const modifyMovieResponseHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const movieId = req.params.id;
-    
+
     // Hit third-party API
     const response = await axios.get(`${THEMOVIDB_BASE_URL}/movie/${movieId}`, {
       headers: {
@@ -98,10 +98,10 @@ export const modifyMovieResponseHandler= async (req: Request, res: Response): Pr
         'accept': 'application/json'
       }
     });
-    
+
     // Modifikasi response
     const modifiedData = modifyMovieResponse(response.data);
-    
+
     // Save to database
     try {
       await saveMovieToDatabase(modifiedData);
@@ -109,7 +109,7 @@ export const modifyMovieResponseHandler= async (req: Request, res: Response): Pr
       console.error('Failed to save movie to database:', dbError);
       // Continue with response even if DB save fails
     }
-    
+
     res.status(200).json({
       requestId: randomUUID(), // generate unique request ID
       data: modifiedData
@@ -125,14 +125,14 @@ export const modifyNowPlayingListResponseHandler = async (req: Request, res: Res
     // Hit third-party API now playing
     const response = await axios.get(`${THEMOVIDB_BASE_URL}/movie/now_playing`, {
       headers: {
-        'Authorization': `Bearer ${THEMOVIDB_API_KEY}`, 
+        'Authorization': `Bearer ${THEMOVIDB_API_KEY}`,
         'accept': 'application/json'
       }
     });
 
     // Modifikasi response
     const modifiedList = response.data.results.map((movie: any) => modifyNowPlayingListResponse(movie));
-    
+
     res.status(200).json({
       requestId: randomUUID(), // generate unique request ID
       data: modifiedList
@@ -140,14 +140,14 @@ export const modifyNowPlayingListResponseHandler = async (req: Request, res: Res
   } catch (error) {
     console.error('Error fetching now playing movies:', error);
     res.status(500).json({ error: 'Failed to fetch now playing movies' });
-  }   
+  }
 }
 
 // Function to get favorite movies from database
 export const getFavoriteMoviesHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const connection = await pool.getConnection();
-    
+
     // Get movies ordered by favorite count (descending) and deleted_at is null
     const [favoriteMovies] = await connection.query(
       'SELECT id, title, budget, revenue, favorite, created_at, updated_at FROM movies WHERE deleted_at IS NULL ORDER BY favorite DESC, created_at DESC'
@@ -158,7 +158,7 @@ export const getFavoriteMoviesHandler = async (req: Request, res: Response): Pro
       data: favoriteMovies,
       count: Array.isArray(favoriteMovies) ? favoriteMovies.length : 0
     });
-    
+
     connection.release();
   } catch (error) {
     console.error('Error fetching favorite movies:', error);
@@ -166,5 +166,34 @@ export const getFavoriteMoviesHandler = async (req: Request, res: Response): Pro
   }
 }
 
+export const getSearchMoviesHandler = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const query = req.query.query as string;
+    const page = parseInt(req.query.page as string) || 1;
+
+    // Hit third-party API search
+    const response = await axios.get(`${THEMOVIDB_BASE_URL}/search/multi`, {
+      headers: {
+        'Authorization': `Bearer ${THEMOVIDB_API_KEY}`,
+        'accept': 'application/json'
+      },
+      params: {
+        query: query,
+        page: page
+      }
+    });
+
+    // Modifikasi response
+    const modifiedList = response.data.results.map((movie: any) => modifyNowPlayingListResponse(movie));
+
+    res.status(200).json({
+      requestId: randomUUID(),
+      data: modifiedList
+    });
+  } catch (error) {
+    console.error('Error fetching search movies:', error);
+    res.status(500).json({ error: 'Failed to fetch search movies' });
+  }
+}
 
 
