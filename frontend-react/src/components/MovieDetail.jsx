@@ -23,6 +23,10 @@ const MovieDetail = () => {
         
         setMovie(movieResponse.data);
         setCredits(creditsResponse.data);
+        // console.log('Movie data:', movieResponse.data);
+        // console.log('Budget:', movieResponse.data.budget);
+        // console.log('Revenue:', movieResponse.data.revenue);
+        // console.log('Homepage:', movieResponse.data.homepage);
         setError(null);
       } catch (err) {
         setError('Failed to fetch movie details. Please try again later.');
@@ -272,7 +276,7 @@ const MovieDetail = () => {
                     </div>
                   )}
                   
-                  {movie.budget && (
+                  {movie.budget !== undefined && movie.budget !== null && movie.budget > 0 && (
                     <div style={{
                       backgroundColor: '#f8f9fa',
                       padding: '1.2rem',
@@ -295,7 +299,7 @@ const MovieDetail = () => {
                     </div>
                   )}
                   
-                  {movie.revenue && (
+                  {movie.revenue !== undefined && movie.revenue !== null && movie.revenue > 0 && (
                     <div style={{
                       backgroundColor: '#f8f9fa',
                       padding: '1.2rem',
@@ -318,7 +322,7 @@ const MovieDetail = () => {
                     </div>
                   )}
                   
-                  {movie.homepage && (
+                  {movie.homepage !== undefined && movie.homepage !== null && movie.homepage.trim() !== '' && (
                     <div style={{
                       gridColumn: 'span 2',
                       backgroundColor: '#f8f9fa',
