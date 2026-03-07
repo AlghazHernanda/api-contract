@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Navbar from './components/Navbar';
 
 // Lazy load components for better performance
 const Home = React.lazy(() => import('./components/Home'));
@@ -13,20 +14,7 @@ const MovieDetail = React.lazy(() => import('./components/MovieDetail'));
 // Loading component
 const LoadingSpinner = () => (
   <>
-    <header>
-      <div className="container">
-        <div className="logo">Auth API Demo</div>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/now-playing">Now Playing</a></li>
-            <li><a href="/register">Register</a></li>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/profile">Profile</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+    <Navbar />
     <main className="container" style={{ padding: '2rem', minHeight: '80vh' }}>
       <div style={{
         display: 'flex',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMovieDetails, getMovieCredits, getPosterUrl, getBackdropUrl, getProfileUrl, formatDate } from '../services/movieService';
+import Navbar from './Navbar';
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -48,20 +49,7 @@ const MovieDetail = () => {
   if (loading) {
     return (
       <>
-        <header>
-          <div className="container">
-            <div className="logo">Auth API Demo</div>
-            <nav>
-              <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/now-playing">Now Playing</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/profile">Profile</a></li>
-              </ul>
-            </nav>
-          </div>
-        </header>
+        <Navbar />
         <main className="container" style={{ padding: '2rem', minHeight: '80vh' }}>
           <div style={{
             display: 'flex',
@@ -212,20 +200,7 @@ const MovieDetail = () => {
   if (error) {
     return (
       <>
-        <header>
-          <div className="container">
-            <div className="logo">Auth API Demo</div>
-            <nav>
-              <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/now-playing">Now Playing</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/profile">Profile</a></li>
-              </ul>
-            </nav>
-          </div>
-        </header>
+        <Navbar />
         <main className="container" style={{ padding: '2rem', minHeight: '80vh' }}>
           <div style={{
             background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
@@ -335,20 +310,7 @@ const MovieDetail = () => {
 
   return (
     <>
-      <header>
-        <div className="container">
-          <div className="logo">Auth API Demo</div>
-          <nav>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/now-playing">Now Playing</a></li>
-              <li><a href="/register">Register</a></li>
-              <li><a href="/login">Login</a></li>
-              <li><a href="/profile">Profile</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <Navbar />
       <main className="container" style={{ padding: '2rem' }}>
         <button
           className="btn btn-secondary"

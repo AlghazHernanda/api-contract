@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Navbar from './Navbar';
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
@@ -56,20 +57,7 @@ const Profile = () => {
   if (loading) {
     return (
       <>
-        <header>
-          <div className="container">
-            <div className="logo">Auth API Demo</div>
-            <nav>
-              <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/now-playing">Now Playing</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/profile">Profile</a></li>
-              </ul>
-            </nav>
-          </div>
-        </header>
+        <Navbar />
         <main className="container" style={{ padding: '2rem', minHeight: '80vh' }}>
           <div style={{
             display: 'flex',
@@ -220,20 +208,7 @@ const Profile = () => {
   if (error) {
     return (
       <>
-        <header>
-          <div className="container">
-            <div className="logo">Auth API Demo</div>
-            <nav>
-              <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/now-playing">Now Playing</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/profile">Profile</a></li>
-              </ul>
-            </nav>
-          </div>
-        </header>
+        <Navbar />
         <main className="container">
           <div className="profile-card">
             <h2>User Profile</h2>
@@ -248,20 +223,7 @@ const Profile = () => {
 
   return (
     <>
-      <header>
-        <div className="container">
-          <div className="logo">Auth API Demo</div>
-          <nav>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/now-playing">Now Playing</a></li>
-              <li><a href="/register">Register</a></li>
-              <li><a href="/login">Login</a></li>
-              <li><a href="/profile">Profile</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="container">
         <div className="profile-card">

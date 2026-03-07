@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getNowPlayingMovies, getPosterUrl, getBackdropUrl, formatDate } from '../services/movieService';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const NowPlaying = () => {
   const [movies, setMovies] = useState([]);
@@ -40,20 +41,7 @@ const NowPlaying = () => {
   if (loading) {
     return (
       <>
-        <header>
-          <div className="container">
-            <div className="logo">Auth API Demo</div>
-            <nav>
-              <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/now-playing">Now Playing</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/profile">Profile</a></li>
-              </ul>
-            </nav>
-          </div>
-        </header>
+        <Navbar />
         <main className="container" style={{ padding: '2rem', minHeight: '80vh' }}>
           <div style={{
             display: 'flex',
@@ -204,20 +192,7 @@ const NowPlaying = () => {
   if (error) {
     return (
       <>
-        <header>
-          <div className="container">
-            <div className="logo">Auth API Demo</div>
-            <nav>
-              <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/now-playing">Now Playing</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/profile">Profile</a></li>
-              </ul>
-            </nav>
-          </div>
-        </header>
+        <Navbar />
         <main className="container" style={{ padding: '2rem' }}>
           <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
             <h2>Error</h2>
@@ -237,20 +212,7 @@ const NowPlaying = () => {
 
   return (
     <>
-      <header>
-        <div className="container">
-          <div className="logo">Auth API Demo</div>
-          <nav>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/now-playing">Now Playing</a></li>
-              <li><a href="/register">Register</a></li>
-              <li><a href="/login">Login</a></li>
-              <li><a href="/profile">Profile</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <Navbar />
       <main className="container" style={{ padding: '2rem' }}>
         <h1 style={{ marginBottom: '2rem', textAlign: 'center' }}>Now Playing Movies</h1>
       

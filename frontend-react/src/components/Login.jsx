@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Navbar from './Navbar';
 
 const Login = () => {
   const [formData, setFormData] = useState({ //formData: Object menyimpan email & password input
@@ -39,20 +40,7 @@ const Login = () => {
 
   return (
     <>
-      <header>
-        <div className="container">
-          <div className="logo">Auth API Demo</div>
-          <nav>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/now-playing">Now Playing</a></li>
-              <li><a href="/register">Register</a></li>
-              <li><a href="/login">Login</a></li>
-              <li><a href="/profile">Profile</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="container">
         <div className="card">
