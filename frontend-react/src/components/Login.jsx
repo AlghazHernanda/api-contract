@@ -45,6 +45,7 @@ const Login = () => {
           <nav>
             <ul>
               <li><a href="/">Home</a></li>
+              <li><a href="/now-playing">Now Playing</a></li>
               <li><a href="/register">Register</a></li>
               <li><a href="/login">Login</a></li>
               <li><a href="/profile">Profile</a></li>

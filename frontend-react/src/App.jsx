@@ -7,6 +7,7 @@ const Home = React.lazy(() => import('./components/Home'));
 const Login = React.lazy(() => import('./components/Login'));
 const Register = React.lazy(() => import('./components/Register'));
 const Profile = React.lazy(() => import('./components/Profile'));
+const NowPlaying = React.lazy(() => import('./components/NowPlaying'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -17,6 +18,7 @@ const LoadingSpinner = () => (
         <nav>
           <ul>
             <li><a href="/">Home</a></li>
+            <li><a href="/now-playing">Now Playing</a></li>
             <li><a href="/register">Register</a></li>
             <li><a href="/login">Login</a></li>
             <li><a href="/profile">Profile</a></li>
@@ -61,29 +63,30 @@ function AppRoutes() {
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route 
-            path="/login" 
+          <Route path="/now-playing" element={<NowPlaying />} />
+          <Route
+            path="/login"
             element={
               <PublicRoute>
                 <Login />
               </PublicRoute>
-            } 
+            }
           />
-          <Route 
-            path="/register" 
+          <Route
+            path="/register"
             element={
               <PublicRoute>
                 <Register />
               </PublicRoute>
-            } 
+            }
           />
-          <Route 
-            path="/profile" 
+          <Route
+            path="/profile"
             element={
               <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
-            } 
+            }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
