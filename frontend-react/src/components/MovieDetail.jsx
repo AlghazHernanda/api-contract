@@ -62,10 +62,147 @@ const MovieDetail = () => {
             </nav>
           </div>
         </header>
-        <main className="container" style={{ padding: '2rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-            <div className="spinner"></div>
-            <p style={{ marginLeft: '1rem' }}>Loading movie details...</p>
+        <main className="container" style={{ padding: '2rem', minHeight: '80vh' }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '60vh',
+            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+            borderRadius: '20px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+            position: 'relative',
+            overflow: 'hidden',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            {/* Animated background elements */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'radial-gradient(circle at 20% 80%, rgba(100, 181, 246, 0.1) 0%, transparent 50%)',
+            }}></div>
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'radial-gradient(circle at 80% 20%, rgba(100, 181, 246, 0.1) 0%, transparent 50%)',
+            }}></div>
+            
+            {/* Loading content */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10,
+              padding: '2rem',
+              textAlign: 'center'
+            }}>
+              {/* Enhanced spinner */}
+              <div style={{
+                width: '60px',
+                height: '60px',
+                position: 'relative',
+                marginBottom: '1.5rem'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  border: '4px solid rgba(255, 255, 255, 0.1)',
+                  borderTop: '4px solid #64b5f6',
+                  animation: 'spin 1s linear infinite'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  border: '4px solid transparent',
+                  borderBottom: '4px solid rgba(100, 181, 246, 0.3)',
+                  animation: 'spin 1.5s linear infinite reverse'
+                }}></div>
+              </div>
+              
+              {/* Loading text with animation */}
+              <h3 style={{
+                color: 'white',
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                margin: '0 0 1rem 0',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+                letterSpacing: '0.5px'
+              }}>
+                Loading Movie Details
+              </h3>
+              
+              <p style={{
+                color: 'rgba(255, 255, 255, 0.8)',
+                fontSize: '1rem',
+                margin: 0,
+                maxWidth: '300px',
+                lineHeight: '1.5'
+              }}>
+                Please wait while we fetch the latest movie information for you...
+              </p>
+              
+              {/* Loading dots animation */}
+              <div style={{
+                display: 'flex',
+                gap: '0.5rem',
+                marginTop: '1.5rem'
+              }}>
+                <div style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  backgroundColor: '#64b5f6',
+                  animation: 'pulse 1.4s ease-in-out infinite both'
+                }}></div>
+                <div style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  backgroundColor: '#64b5f6',
+                  animation: 'pulse 1.4s ease-in-out infinite both',
+                  animationDelay: '0.2s'
+                }}></div>
+                <div style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  backgroundColor: '#64b5f6',
+                  animation: 'pulse 1.4s ease-in-out infinite both',
+                  animationDelay: '0.4s'
+                }}></div>
+              </div>
+            </div>
+            
+            {/* Add keyframes for animations */}
+            <style jsx>{`
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+              
+              @keyframes pulse {
+                0%, 80%, 100% {
+                  transform: scale(0);
+                  opacity: 0.5;
+                }
+                40% {
+                  transform: scale(1);
+                  opacity: 1;
+                }
+              }
+            `}</style>
           </div>
         </main>
       </>
@@ -89,17 +226,107 @@ const MovieDetail = () => {
             </nav>
           </div>
         </header>
-        <main className="container" style={{ padding: '2rem' }}>
-          <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
-            <h2>Error</h2>
-            <p>{error}</p>
-            <button 
-              className="btn btn-primary" 
-              onClick={goBack}
-              style={{ marginTop: '1rem' }}
-            >
-              Back to Movies
-            </button>
+        <main className="container" style={{ padding: '2rem', minHeight: '80vh' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+            borderRadius: '20px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+            padding: '3rem',
+            textAlign: 'center',
+            maxWidth: '600px',
+            margin: '0 auto',
+            position: 'relative',
+            overflow: 'hidden',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            {/* Animated background elements */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'radial-gradient(circle at 20% 80%, rgba(220, 53, 69, 0.1) 0%, transparent 50%)',
+            }}></div>
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'radial-gradient(circle at 80% 20%, rgba(220, 53, 69, 0.1) 0%, transparent 50%)',
+            }}></div>
+            
+            <div style={{ position: 'relative', zIndex: 10 }}>
+              {/* Error icon */}
+              <div style={{
+                width: '80px',
+                height: '80px',
+                backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 2rem',
+                border: '2px solid rgba(220, 53, 69, 0.3)'
+              }}>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#dc3545" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="15" y1="9" x2="9" y2="15"></line>
+                  <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+              </div>
+              
+              {/* Error title and message */}
+              <h2 style={{
+                color: 'white',
+                fontSize: '2rem',
+                fontWeight: '700',
+                margin: '0 0 1rem 0',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+                letterSpacing: '0.5px'
+              }}>
+                Oops! Something went wrong
+              </h2>
+              
+              <p style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontSize: '1.1rem',
+                margin: '0 0 2rem 0',
+                lineHeight: '1.5',
+                maxWidth: '400px'
+              }}>
+                {error}
+              </p>
+              
+              <button
+                className="btn btn-primary"
+                onClick={goBack}
+                style={{
+                  marginTop: '2rem',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
+                  transition: 'all 0.3s ease',
+                  color: 'white',
+                  fontWeight: '600',
+                  padding: '0.75rem 2rem',
+                  fontSize: '1rem'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.15)';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+                }}
+              >
+                ← Back to Movies
+              </button>
+            </div>
           </div>
         </main>
       </>
@@ -123,10 +350,26 @@ const MovieDetail = () => {
         </div>
       </header>
       <main className="container" style={{ padding: '2rem' }}>
-        <button 
-          className="btn btn-secondary" 
+        <button
+          className="btn btn-secondary"
           onClick={goBack}
-          style={{ marginBottom: '1rem' }}
+          style={{
+            marginBottom: '1rem',
+            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseOver={(e) => {
+            e.target.style.background = 'linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%)';
+            e.target.style.transform = 'translateY(-1px)';
+            e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
+          }}
+          onMouseOut={(e) => {
+            e.target.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+          }}
         >
           ← Back to Movies
         </button>
