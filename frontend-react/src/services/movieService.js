@@ -92,3 +92,27 @@ export const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
+
+// Search movies
+export const searchMovies = async (query, page = 1) => {
+  try {
+    // Note: The API doesn't seem to support pagination in the current implementation
+    // The page parameter is kept for compatibility but won't affect the results
+    const response = await fetch(`${API_BASE_URL}/movie_core/search?query=${encodeURIComponent(query)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error searching movies:', error);
+    throw error;
+  }
+};

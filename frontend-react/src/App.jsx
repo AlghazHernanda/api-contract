@@ -10,6 +10,7 @@ const Register = React.lazy(() => import('./components/Register'));
 const Profile = React.lazy(() => import('./components/Profile'));
 const NowPlaying = React.lazy(() => import('./components/NowPlaying'));
 const MovieDetail = React.lazy(() => import('./components/MovieDetail'));
+const SearchMovies = React.lazy(() => import('./components/SearchMovies'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -190,6 +191,7 @@ function AppRoutes() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/now-playing" element={<NowPlaying />} />
+          <Route path="/search" element={<SearchMovies />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
           <Route
             path="/login"

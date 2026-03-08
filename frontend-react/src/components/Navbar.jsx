@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -20,6 +21,15 @@ const Navbar = () => {
     logout();
     navigate('/login');
     closeMenu();
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      closeMenu();
+    }
   };
 
   return (
@@ -50,6 +60,18 @@ const Navbar = () => {
             )}
           </ul>
         </nav>
+        <div className="search-container">
+          <form onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Search movies..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+            <button type="submit" className="search-button">Search</button>
+          </form>
+        </div>
       </div>
     </header>
   );
