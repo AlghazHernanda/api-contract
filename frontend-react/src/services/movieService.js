@@ -93,7 +93,7 @@ export const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
-// Search movies
+// fetch Search movies
 export const searchMovies = async (query, page = 1) => {
   try {
     // Note: The API doesn't seem to support pagination in the current implementation
