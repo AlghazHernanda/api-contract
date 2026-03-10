@@ -23,6 +23,7 @@ const Navbar = () => {
     closeMenu();
   };
 
+  // Handle search form submission
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
