@@ -25,6 +25,7 @@ const SearchMovies = () => {
 
       try {
         setLoading(true);
+        //fetch movies based on search query and current page
         const response = await searchMovies(query, currentPage);
         // API response format: { requestId, data: [...] }
         setMovies(response.data || []);
