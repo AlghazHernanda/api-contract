@@ -1,8 +1,9 @@
 import dotenv from 'dotenv';
-import { tvSeriesDetailTypes, tvSeriesListTypes } from '../types/tvSeries';
+import { tvSeriesCreditTypes, tvSeriesDetailTypes, tvSeriesListTypes } from '../types/tvSeries';
 import axios from 'axios';
 import { randomUUID } from 'crypto';
 import { Request, Response } from 'express';
+import { MovieCreditTypes } from '../types/modifyMovie';
 dotenv.config();
 
 //get env key
@@ -33,6 +34,20 @@ export function modifyTvSeriesDetailResponse(originalData: any): tvSeriesDetailT
         homepage: originalData.homepage,
         tagline: originalData.tagline
     }
+}
+
+export function modifyTvSeriesCreditResponse(originalData: any): tvSeriesCreditTypes {
+    return {
+        cast: originalData.cast.map((castMember: any) => ({
+            id: castMember.id,
+            credit_id: castMember.credit_id,
+            character: castMember.character,
+            name: castMember.name,
+            profile_path: castMember.profile_path,
+            gender: castMember.gender,
+            known_for_department: castMember.known_for_department
+        }))
+    };
 }
 
 //wrapper tvSeries list
@@ -75,5 +90,29 @@ export const tvSeriesDetailResponseHandler = async (req: Request, res: Response)
     catch (error) {
         console.error('Error fetching TV series details:', error);
         res.status(500).json({ error: 'Failed to fetch TV series data' });
+    }
+}
+
+export const modifyTvSeriesCreditResponseHandler = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const tvSeriesId = req.params.id;
+        const response = await axios.get(`${THEMOVIDB_BASE_URL}/tv/${tvSeriesId}/credits`, {
+            headers: {
+                'Authorization': `Bearer ${THEMOVIDB_API_KEY}`,
+                'accept': 'application/json'
+            }
+        });
+
+        const modifiedData = modifyTvSeriesCreditResponse(response.data);
+        console.log(modifiedData);
+
+
+        res.status(200).json({
+            requestId: randomUUID(),
+            data: modifiedData
+        });
+    } catch (error) {
+        console.error('Error fetching TV series credits:', error);
+        res.status(500).json({ error: 'Failed to fetch TV series credits' });
     }
 }
