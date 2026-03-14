@@ -13,6 +13,10 @@ export default defineConfig({
       '/api/movie_core': {
         target: 'http://localhost:3001',
         changeOrigin: true
+      },
+      '/api/tv_series_core': {
+        target: 'http://localhost:3001',
+        changeOrigin: true
       }
     }
   }

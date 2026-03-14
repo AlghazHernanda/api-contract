@@ -49,6 +49,7 @@ const Navbar = () => {
           <ul>
             <li><a href="/" onClick={closeMenu}>Home</a></li>
             <li><a href="/now-playing" onClick={closeMenu}>Now Playing</a></li>
+            <li><a href="/airing-today" onClick={closeMenu}>Airing Today</a></li>
             {!isAuthenticated ? (
               <>
                 <li><a href="/register" onClick={closeMenu}>Register</a></li>

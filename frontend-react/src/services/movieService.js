@@ -116,3 +116,47 @@ export const searchMovies = async (query, page = 1) => {
     throw error;
   }
 };
+
+// Fetch TV series airing today
+export const getAiringTodayTVSeries = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/tv_series_core/airing_today`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching airing today TV series:', error);
+    throw error;
+  }
+};
+
+// Fetch TV series details
+export const getTVSeriesDetails = async (tvSeriesId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/tv_series_core/detail/${tvSeriesId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching TV series details:', error);
+    throw error;
+  }
+};

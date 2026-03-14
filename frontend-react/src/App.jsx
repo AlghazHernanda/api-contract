@@ -11,6 +11,8 @@ const Profile = React.lazy(() => import('./components/Profile'));
 const NowPlaying = React.lazy(() => import('./components/NowPlaying'));
 const MovieDetail = React.lazy(() => import('./components/MovieDetail'));
 const SearchMovies = React.lazy(() => import('./components/SearchMovies'));
+const AiringToday = React.lazy(() => import('./components/AiringToday'));
+const TvSeriesDetail = React.lazy(() => import('./components/TvSeriesDetail'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -192,7 +194,9 @@ function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/now-playing" element={<NowPlaying />} />
           <Route path="/search" element={<SearchMovies />} />
+          <Route path="/airing-today" element={<AiringToday />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
+          <Route path="/tv/:id" element={<TvSeriesDetail />} />
           <Route
             path="/login"
             element={
