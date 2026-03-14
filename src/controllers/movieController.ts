@@ -1,4 +1,4 @@
-import { ModifyMovieTypes, ModifyNowPlayingListTypes, MovieCreditTypes } from '../types/modifyMovie';
+import { ModifyMovieTypes, ModifyNowPlayingListTypes, ModifySearchListTypes, MovieCreditTypes } from '../types/modifyMovie';
 import dotenv from 'dotenv';
 import axios from 'axios';
 import { Request, Response } from 'express';
@@ -40,6 +40,17 @@ export function modifyNowPlayingListResponse(originalData: any): ModifyNowPlayin
     poster_path: originalData.poster_path,
     backdrop_path: originalData.backdrop_path,
     release_date: originalData.release_date
+  };
+}
+
+export function modifySearchListResponse(originalData: any): ModifySearchListTypes {
+  return {
+    id: originalData.id,
+    title: originalData.title,
+    popularity: originalData.popularity,
+    poster_path: originalData.poster_path,
+    backdrop_path: originalData.backdrop_path,
+    media_type: originalData.media_type
   };
 }
 
@@ -199,7 +210,7 @@ export const getSearchMoviesHandler = async (req: Request, res: Response): Promi
     });
 
     // Modifikasi response
-    const modifiedList = response.data.results.map((movie: any) => modifyNowPlayingListResponse(movie));
+    const modifiedList = response.data.results.map((movie: any) => modifySearchListResponse(movie));
 
     res.status(200).json({
       requestId: randomUUID(),

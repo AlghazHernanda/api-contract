@@ -27,6 +27,15 @@ export interface ModifyNowPlayingListTypes {
   release_date?: string;
 }
 
+export interface ModifySearchListTypes {
+  id: number;
+  title: string;
+  popularity: number;
+  poster_path?: string;
+  backdrop_path?: string;
+  media_type?: string;
+}
+
 export interface MovieCreditTypes {
   id: number;
   cast: Array<{

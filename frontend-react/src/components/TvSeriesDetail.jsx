@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getTVSeriesDetails, getPosterUrl, getBackdropUrl, formatDate } from '../services/movieService';
+import { getTVSeriesDetails, getTVSeriesCredits, getPosterUrl, getBackdropUrl, getProfileUrl, formatDate } from '../services/movieService';
 import Navbar from './Navbar';
 
 const TvSeriesDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [tvSeries, setTvSeries] = useState(null);
+  const [credits, setCredits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const castScrollRef = React.useRef(null);
   
   // Handle window resize
   useEffect(() => {
@@ -21,12 +23,38 @@ const TvSeriesDetail = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Scroll functions for cast slider
+  const scrollCastLeft = () => {
+    if (castScrollRef.current) {
+      castScrollRef.current.scrollBy({
+        left: -300,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const scrollCastRight = () => {
+    if (castScrollRef.current) {
+      castScrollRef.current.scrollBy({
+        left: 300,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   useEffect(() => {
     const fetchTVSeriesData = async () => {
       try {
         setLoading(true);
-        const response = await getTVSeriesDetails(id);
-        setTvSeries(response.data);
+        
+        // Fetch TV series details and credits in parallel
+        const [tvSeriesResponse, creditsResponse] = await Promise.all([
+          getTVSeriesDetails(id),
+          getTVSeriesCredits(id)
+        ]);
+        
+        setTvSeries(tvSeriesResponse.data);
+        setCredits(creditsResponse.data);
         setError(null);
       } catch (err) {
         setError('Failed to fetch TV series details. Please try again later.');
@@ -589,6 +617,287 @@ const TvSeriesDetail = () => {
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Cast Section */}
+        {credits && credits.cast && credits.cast.length > 0 && (
+          <div style={{
+            marginTop: '2rem',
+            background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+            border: '1px solid rgba(0, 0, 0, 0.05)',
+            position: 'relative'
+          }}>
+            {/* Section header with gradient background */}
+            <div style={{
+              padding: '1.5rem 2rem',
+              borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              {/* Animated background elements */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'radial-gradient(circle at 20% 80%, rgba(100, 181, 246, 0.1) 0%, transparent 50%)',
+              }}></div>
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'radial-gradient(circle at 80% 20%, rgba(100, 181, 246, 0.1) 0%, transparent 50%)',
+              }}></div>
+              
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                position: 'relative',
+                zIndex: 10
+              }}>
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  backgroundColor: 'rgba(100, 181, 246, 0.2)',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64b5f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                 
+                <h2 style={{
+                  margin: 0,
+                  fontSize: '1.5rem',
+                  color: 'white',
+                  fontWeight: '700',
+                  letterSpacing: '0.5px'
+                }}>Cast</h2>
+              </div>
+            </div>
+             
+            {/* Enhanced slider container */}
+            <div style={{
+              padding: '2rem 1.5rem',
+              position: 'relative'
+            }}>
+              {/* Scroll indicators */}
+              <button
+                onClick={scrollCastLeft}
+                style={{
+                  position: 'absolute',
+                  left: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: '50px',
+                  height: '50px',
+                  background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 20,
+                  border: '2px solid rgba(100, 181, 246, 0.3)',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+                  transition: 'all 0.3s ease',
+                  overflow: 'hidden'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%)';
+                  e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
+                  e.target.style.transform = 'translateY(-50%) scale(1)';
+                  e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+                }}
+              >
+                <div style={{
+                  width: '20px',
+                  height: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64b5f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M15 18l-6-6 6-6"></path>
+                  </svg>
+                </div>
+              </button>
+              
+              <button
+                onClick={scrollCastRight}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: '50px',
+                  height: '50px',
+                  background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 20,
+                  border: '2px solid rgba(100, 181, 246, 0.3)',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+                  transition: 'all 0.3s ease',
+                  overflow: 'hidden'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%)';
+                  e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
+                  e.target.style.transform = 'translateY(-50%) scale(1)';
+                  e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+                }}
+              >
+                <div style={{
+                  width: '20px',
+                  height: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64b5f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 18l6-6-6-6"></path>
+                  </svg>
+                </div>
+              </button>
+              
+              {/* Scrollable cast container */}
+              <div
+                ref={castScrollRef}
+                style={{
+                  overflowX: 'auto',
+                  overflowY: 'hidden',
+                  scrollBehavior: 'smooth',
+                  WebkitOverflowScrolling: 'touch',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                  padding: '0.5rem 0'
+                }}
+                onScroll={(e) => {
+                  const scrollPercentage = (e.target.scrollLeft / (e.target.scrollWidth - e.target.clientWidth)) * 100;
+                  // You can use this for progress indicators if needed
+                }}
+              >
+                <style jsx>{`
+                  div::-webkit-scrollbar {
+                    display: none;
+                  }
+                `}</style>
+                 
+                <div style={{
+                  display: 'flex',
+                  gap: '1.5rem',
+                  paddingBottom: '1rem'
+                }}>
+                  {credits.cast.map((castMember, index) => (
+                    <div key={castMember.id} style={{
+                      flex: '0 0 140px',
+                      textAlign: 'center',
+                      opacity: index >= 10 ? 0.7 : 1,
+                      transition: 'all 0.3s ease',
+                      cursor: 'pointer',
+                      borderRadius: '12px',
+                      padding: '0.5rem',
+                      background: 'rgba(255, 255, 255, 0.8)',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-5px)';
+                      e.currentTarget.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
+                      e.currentTarget.style.opacity = '1';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.08)';
+                      e.currentTarget.style.opacity = index >= 10 ? 0.7 : 1;
+                    }}>
+                      <img
+                        src={getProfileUrl(castMember.profile_path)}
+                        alt={castMember.name}
+                        style={{
+                          width: '140px',
+                          height: '210px',
+                          objectFit: 'cover',
+                          borderRadius: '8px',
+                          marginBottom: '0.75rem',
+                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                          border: '2px solid #fff'
+                        }}
+                      />
+                      <h4 style={{
+                        margin: '0 0 0.25rem 0',
+                        fontSize: '0.95rem',
+                        fontWeight: '600',
+                        color: '#2c3e50',
+                        lineHeight: '1.3',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap'
+                      }}>{castMember.name}</h4>
+                      <p style={{
+                        margin: 0,
+                        fontSize: '0.85rem',
+                        color: '#64b5f6',
+                        fontStyle: 'italic',
+                        fontWeight: '500',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap'
+                      }}>{castMember.character}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Cast count indicator */}
+              <div style={{
+                textAlign: 'center',
+                marginTop: '1.5rem',
+                padding: '0.75rem',
+                background: 'rgba(100, 181, 246, 0.1)',
+                borderRadius: '8px',
+                border: '1px solid rgba(100, 181, 246, 0.2)'
+              }}>
+                <p style={{
+                  margin: 0,
+                  color: '#64b5f6',
+                  fontSize: '0.9rem',
+                  fontWeight: '600'
+                }}>
+                  Showing {Math.min(credits.cast.length, 10)} of {credits.cast.length} cast members
+                </p>
               </div>
             </div>
           </div>
