@@ -45,8 +45,13 @@ const SearchMovies = () => {
     fetchMovies();
   }, [query, currentPage]);
 
-  const handleMovieClick = (movie) => {
-    navigate(`/movie/${movie.id}`);
+  const handleMovieClick = (item) => {
+    // Check media_type to determine which detail page to navigate to
+    if (item.media_type === 'tv') {
+      navigate(`/tv/${item.id}`);
+    } else {
+      navigate(`/movie/${item.id}`);
+    }
   };
 
   const handlePageChange = (page) => {
