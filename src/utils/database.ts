@@ -59,19 +59,19 @@ export async function initializeDatabase(): Promise<void> {
       charset: 'utf8mb4',
       connectTimeout: 60000
     });
-    
+
     const connection = await tempPool.getConnection();
-    
+
     // Create database if it doesn't exist
     await connection.query(`CREATE DATABASE IF NOT EXISTS ${config.database}`);
     console.log(`Database '${config.database}' created or already exists`);
-    
+
     connection.release();
     await tempPool.end();
-    
+
     // Now connect to the specific database and create table
     const dbConnection = await pool.getConnection();
-    
+
     // Create users table
     await dbConnection.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -83,7 +83,7 @@ export async function initializeDatabase(): Promise<void> {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create movies table
     await dbConnection.query(`
       CREATE TABLE IF NOT EXISTS movies (
@@ -98,7 +98,7 @@ export async function initializeDatabase(): Promise<void> {
         UNIQUE KEY unique_movie_id (id)
       )
     `);
-    
+
     // Add deleted_at column if it doesn't exist (for existing tables)
     try {
       await dbConnection.query(`
@@ -110,7 +110,7 @@ export async function initializeDatabase(): Promise<void> {
       // Column might already exist, ignore error
       console.log('deleted_at column already exists in movies table');
     }
-    
+
     // Add favorite column if it doesn't exist (for existing tables)
     try {
       await dbConnection.query(`
@@ -122,7 +122,19 @@ export async function initializeDatabase(): Promise<void> {
       // Column might already exist, ignore error
       console.log('favorite column already exists in movies table');
     }
-    
+
+    // Add aggregator_response column if it doesn't exist (for existing tables)
+    try {
+      await dbConnection.query(`
+        ALTER TABLE movies
+        ADD COLUMN IF NOT EXISTS aggregator_response JSON NULL
+      `);
+      console.log('aggregator_response column added to movies table (or already exists)');
+    } catch (error) {
+      // Column might already exist, ignore error
+      console.log('aggregator_response column already exists in movies table');
+    }
+
     dbConnection.release();
     console.log('Users and Movies tables created successfully');
     console.log('Database initialized successfully');

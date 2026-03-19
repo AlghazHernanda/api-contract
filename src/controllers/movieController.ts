@@ -70,7 +70,7 @@ export function modifyMovieCreditResponse(originalData: any): MovieCreditTypes {
 }
 
 // Function to save movie data to database
-async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
+async function saveMovieToDatabase(movieData: ModifyMovieTypes, rawResponseData: any): Promise<void> {
   try {
     const connection = await pool.getConnection();
 
@@ -91,8 +91,8 @@ async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
 
       // Update existing movie and increment favorite count
       await connection.query(
-        'UPDATE movies SET title = ?, budget = ?, revenue = ?, favorite = favorite + 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-        [movieData.title, movieData.budget, movieData.revenue, movieData.id]
+        'UPDATE movies SET title = ?, budget = ?, revenue = ?, favorite = favorite + 1, aggregator_response = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+        [movieData.title, movieData.budget, movieData.revenue, JSON.stringify(rawResponseData), movieData.id]
       );
       console.log(`Movie with ID ${movieData.id} updated. Favorite count: ${currentFavorite} → ${newFavorite}`);
     } else {
@@ -100,8 +100,8 @@ async function saveMovieToDatabase(movieData: ModifyMovieTypes): Promise<void> {
 
       // Insert new movie with favorite count = 1
       await connection.query(
-        'INSERT INTO movies (id, title, budget, revenue, favorite) VALUES (?, ?, ?, ?, 1)',
-        [movieData.id, movieData.title, movieData.budget, movieData.revenue]
+        'INSERT INTO movies (id, title, budget, revenue, favorite, aggregator_response) VALUES (?, ?, ?, ?, 1, ?)',
+        [movieData.id, movieData.title, movieData.budget, movieData.revenue, JSON.stringify(rawResponseData)]
       );
       console.log(`Movie with ID ${movieData.id} saved to database. Initial favorite count: 1`);
     }
@@ -130,7 +130,8 @@ export const modifyMovieResponseHandler = async (req: Request, res: Response): P
 
     // Save to database
     try {
-      await saveMovieToDatabase(modifiedData);
+      //response.data adalah data asli dari themoviedb untuk di simpan pada aggregaotor_response
+      await saveMovieToDatabase(modifiedData, response.data);
     } catch (dbError) {
       console.error('Failed to save movie to database:', dbError);
       // Continue with response even if DB save fails
