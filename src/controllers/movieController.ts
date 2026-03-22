@@ -70,6 +70,7 @@ export function modifyMovieCreditResponse(originalData: any): MovieCreditTypes {
 }
 
 // Function to save movie data to database
+// rawResponseData adalah data asli dari themoviedb untuk di simpan pada aggregaotor_response
 async function saveMovieToDatabase(movieData: ModifyMovieTypes, rawResponseData: any): Promise<void> {
   try {
     const connection = await pool.getConnection();
