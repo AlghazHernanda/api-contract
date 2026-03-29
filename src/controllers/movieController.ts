@@ -8,6 +8,7 @@ import { pool } from '../utils/database';
 
 dotenv.config();
 
+//test
 const THEMOVIDB_API_KEY = process.env.THEMOVIDB_API_KEY;
 const THEMOVIDB_BASE_URL = process.env.THEMOVIDB_BASE_URL || 'https://api.themoviedb.org/3';
 
