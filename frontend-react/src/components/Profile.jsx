@@ -12,6 +12,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    //gaada token, silahkan login
     if (!isAuthenticated) {
       navigate('/login');
       return;
