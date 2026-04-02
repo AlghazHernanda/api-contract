@@ -17,7 +17,8 @@ const Profile = () => {
       navigate('/login');
       return;
     }
-
+    
+    //fetch profile data
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('authToken');
