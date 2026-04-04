@@ -51,6 +51,8 @@ const Profile = () => {
     fetchProfile();
   }, [isAuthenticated, navigate, logout]);
 
+
+  //logout
   const handleLogout = () => {
     logout();
     navigate('/login');
