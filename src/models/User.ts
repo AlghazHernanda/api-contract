@@ -59,6 +59,7 @@ export class UserModel {
     }
   }
 
+  //query untuk mencari userID
   static async findById(id: number): Promise<User | null> {
     const query = 'SELECT * FROM users WHERE id = ?';
 
