@@ -72,7 +72,7 @@ export class UserModel {
     }
   }
 
-  //cari username
+  //cari semua by username
   static async findByUsername(username: string): Promise<User | null> {
     const query = 'SELECT * FROM users WHERE username = ?';
 
