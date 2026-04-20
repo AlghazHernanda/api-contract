@@ -11,6 +11,7 @@ export interface AuthenticatedRequest extends Request {
   };
 }
 
+//authenticateToken middleware untuk memverifikasi token JWT dan menambahkan informasi user ke request
 export const authenticateToken = async (
   req: AuthenticatedRequest,
   res: Response,
