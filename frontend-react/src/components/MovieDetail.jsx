@@ -33,6 +33,7 @@ const MovieDetail = () => {
     }
   };
 
+  //scrollCastRight untuk menggeser slider cast ke kanan dengan efek smooth
   const scrollCastRight = () => {
     if (castScrollRef.current) {
       castScrollRef.current.scrollBy({
