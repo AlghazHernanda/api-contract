@@ -46,6 +46,7 @@ const MovieDetail = () => {
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
+        //set loading menjadi true
         setLoading(true);
         
         // Fetch movie details and credits in parallel
