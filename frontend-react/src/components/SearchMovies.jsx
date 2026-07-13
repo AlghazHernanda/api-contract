@@ -243,7 +243,7 @@ const SearchMovies = () => {
   return (
     <>
       <Navbar />
-      <main className="container" style={{ padding: '2rem' }}>
+      <main style={{ padding: '2rem 1rem', width: '100%', maxWidth: '100%' }}>
         {/* Search form */}
         <div className="card" style={{ marginBottom: '2rem' }}>
           <form onSubmit={handleSearchSubmit}>
@@ -355,9 +355,10 @@ const SearchMovies = () => {
         {query && movies.length > 0 && (
           <div className="movie-grid" style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
-            gap: '1.5rem',
-            marginBottom: '2rem'
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+            gap: '1rem',
+            marginBottom: '2rem',
+            padding: '0 0.5rem'
           }}>
             {movies.map((movie) => (
               <div 

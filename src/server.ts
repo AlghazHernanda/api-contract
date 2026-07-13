@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { testConnection, initializeDatabase } from './utils/database';
+// Database sekarang menggunakan Supabase PostgreSQL via postgres.js
 import authRoutes from './routes/auth';
 
 // Load environment variables
@@ -68,8 +69,8 @@ async function startServer() {
       await initializeDatabase();
     } else {
       console.log('⚠️  Database connection failed. Server will start without database functionality.');
-      console.log('   Please check your MariaDB configuration in .env file');
-      console.log('   Make sure MariaDB is running and credentials are correct');
+      console.log('   Please check your Supabase DATABASE_URL in .env file');
+      console.log('   Make sure the connection string is correct');
     }
 
     // Start listening

@@ -213,7 +213,7 @@ const AiringToday = () => {
   return (
     <>
       <Navbar />
-      <main className="container" style={{ padding: '2rem' }}>
+      <main style={{ padding: '2rem 1rem', width: '100%', maxWidth: '100%' }}>
         <h1 style={{ marginBottom: '2rem', textAlign: 'center' }}>TV Series Airing Today</h1>
       
       {tvSeries.length === 0 ? (
@@ -224,9 +224,10 @@ const AiringToday = () => {
       ) : (
         <div className="tv-series-grid" style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
-          gap: '1.5rem',
-          marginBottom: '2rem'
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+          gap: '1rem',
+          marginBottom: '2rem',
+          padding: '0 0.5rem'
         }}>
           {tvSeries.map((series) => (
             <div 

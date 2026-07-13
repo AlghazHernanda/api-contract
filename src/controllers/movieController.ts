@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 import { Request, Response } from 'express';
 import { randomUUID } from 'node:crypto';
-import { pool } from '../utils/database';
+import sql from '../utils/database';
 
 
 dotenv.config();
@@ -24,12 +24,6 @@ export function modifyMovieResponse(originalData: any): ModifyMovieTypes {
     backdrop_path: originalData.backdrop_path,
     homepage: originalData.homepage,
     tagline: originalData.tagline
-
-    // custom_fields: {
-    //   rating: Math.floor(Math.random() * 10) + 1,
-    //   genre: "Modified Genre",
-    //   language: "ID"
-    // }
   };
 }
 
@@ -72,44 +66,41 @@ export function modifyMovieCreditResponse(originalData: any): MovieCreditTypes {
 }
 
 // Function to save movie data to database
-// rawResponseData adalah data asli dari themoviedb untuk di simpan pada aggregaotor_response
+// rawResponseData adalah data asli dari themoviedb untuk di simpan pada aggregator_response
 async function saveMovieToDatabase(movieData: ModifyMovieTypes, rawResponseData: any): Promise<void> {
   try {
-    const connection = await pool.getConnection();
-
     // Check if movie already exists
-    //object existingMovies jika ada memiliki value : [{"id":1373198,"favorite":3}]
-    const [existingMovies] = await connection.query(
-      'SELECT id, favorite FROM movies WHERE id = ?',
-      [movieData.id]
-    );
+    const existingMovies = await sql`
+      SELECT id, favorite FROM movies WHERE id = ${movieData.id}
+    `;
 
-    //console.log(`DEBUG: existing movies ${JSON.stringify(existingMovies)}`);
-
-    if (Array.isArray(existingMovies) && existingMovies.length > 0) {
-      const currentFavorite = (existingMovies[0] as any).favorite || 0;
+    if (existingMovies.length > 0) {
+      const currentFavorite = existingMovies[0].favorite || 0;
       const newFavorite = currentFavorite + 1;
 
       console.log(`DEBUG: Movie ${movieData.id} exists. Current favorite: ${currentFavorite}`);
 
       // Update existing movie and increment favorite count
-      await connection.query(
-        'UPDATE movies SET title = ?, budget = ?, revenue = ?, favorite = favorite + 1, aggregator_response = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-        [movieData.title, movieData.budget, movieData.revenue, JSON.stringify(rawResponseData), movieData.id]
-      );
+      await sql`
+        UPDATE movies 
+        SET title = ${movieData.title}, 
+            budget = ${movieData.budget}, 
+            revenue = ${movieData.revenue}, 
+            favorite = favorite + 1, 
+            aggregator_response = ${JSON.stringify(rawResponseData)}::jsonb
+        WHERE id = ${movieData.id}
+      `;
       console.log(`Movie with ID ${movieData.id} updated. Favorite count: ${currentFavorite} → ${newFavorite}`);
     } else {
       console.log(`DEBUG: Movie ${movieData.id} is new. Setting favorite to 1`);
 
       // Insert new movie with favorite count = 1
-      await connection.query(
-        'INSERT INTO movies (id, title, budget, revenue, favorite, aggregator_response) VALUES (?, ?, ?, ?, 1, ?)',
-        [movieData.id, movieData.title, movieData.budget, movieData.revenue, JSON.stringify(rawResponseData)]
-      );
+      await sql`
+        INSERT INTO movies (id, title, budget, revenue, favorite, aggregator_response)
+        VALUES (${movieData.id}, ${movieData.title}, ${movieData.budget}, ${movieData.revenue}, 1, ${JSON.stringify(rawResponseData)}::jsonb)
+      `;
       console.log(`Movie with ID ${movieData.id} saved to database. Initial favorite count: 1`);
     }
-
-    connection.release();
   } catch (error) {
     console.error('Error saving movie to database:', error);
     throw error;
@@ -133,7 +124,7 @@ export const modifyMovieResponseHandler = async (req: Request, res: Response): P
 
     // Save to database
     try {
-      //response.data adalah data asli dari themoviedb untuk di simpan pada aggregaotor_response
+      //response.data adalah data asli dari themoviedb untuk di simpan pada aggregator_response
       await saveMovieToDatabase(modifiedData, response.data);
     } catch (dbError) {
       console.error('Failed to save movie to database:', dbError);
@@ -176,20 +167,19 @@ export const modifyNowPlayingListResponseHandler = async (req: Request, res: Res
 // Function to get favorite movies from database
 export const getFavoriteMoviesHandler = async (req: Request, res: Response): Promise<void> => {
   try {
-    const connection = await pool.getConnection();
-
     // Get movies ordered by favorite count (descending) and deleted_at is null
-    const [favoriteMovies] = await connection.query(
-      'SELECT id, title, budget, revenue, favorite, created_at, updated_at FROM movies WHERE deleted_at IS NULL ORDER BY favorite DESC, created_at DESC'
-    );
+    const favoriteMovies = await sql`
+      SELECT id, title, budget, revenue, favorite, created_at, updated_at 
+      FROM movies 
+      WHERE deleted_at IS NULL 
+      ORDER BY favorite DESC, created_at DESC
+    `;
 
     res.status(200).json({
       requestId: randomUUID(),
       data: favoriteMovies,
-      count: Array.isArray(favoriteMovies) ? favoriteMovies.length : 0
+      count: favoriteMovies.length
     });
-
-    connection.release();
   } catch (error) {
     console.error('Error fetching favorite movies:', error);
     res.status(500).json({ error: 'Failed to fetch favorite movies' });
@@ -249,5 +239,3 @@ export const modifyMovieCreditResponseHandler = async (req: Request, res: Respon
     res.status(500).json({ error: 'Failed to fetch movie credits' });
   }
 }
-
-

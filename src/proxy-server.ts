@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 // import axios from 'axios';
 // import { modifyMovieResponse } from './controllers/movieController';
 import movieRoutes from './routes/movieRoutes';
-import { testConnection, initializeDatabase } from './utils/database';
+import { testConnection } from './utils/database';
+// Database sekarang menggunakan Supabase PostgreSQL via postgres.js
 import tvListRoutes from './routes/tvListRoutes';
 
 // Load environment variables
@@ -102,11 +103,11 @@ async function startProxyServer() {
 
     if (dbConnected) {
       console.log('Database connection successful!');
-      // Initialize database
-      await initializeDatabase();
+      // Skip initializeDatabase here — auth server handles it
+      // Ini menghindari race condition saat kedua server jalan bersamaan
     } else {
       console.log('⚠️  Database connection failed. Movie data will not be saved to database.');
-      console.log('   Please check your MariaDB configuration in .env file');
+      console.log('   Please check your Supabase DATABASE_URL in .env file');
     }
 
     // Start listening

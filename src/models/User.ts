@@ -1,4 +1,4 @@
-import { pool } from '../utils/database';
+import sql from '../utils/database';
 import { User, CreateUserRequest } from '../types/user';
 import { hashPassword } from '../utils/password';
 
@@ -13,47 +13,34 @@ export class UserModel {
     // Hash the password
     const hashedPassword = await hashPassword(password);
 
-    //Placeholders (?) untuk safe parameter binding
-    const query = `
-      INSERT INTO users (username, email, password, phone)
-      VALUES (?, ?, ?, ?)
-    `;
-
     try {
-      const [result] = await pool.execute(query, [username, email, hashedPassword, phone]);
-      //insertId adalah ID auto-increment dari user baru
-      //Type assertion as any untuk mengakses insertId
-      const insertId = (result as any).insertId;
+      // INSERT dengan RETURNING — PostgreSQL bisa langsung return data yang baru dibuat
+      const [user] = await sql`
+        INSERT INTO users (username, email, password, phone)
+        VALUES (${username}, ${email}, ${hashedPassword}, ${phone})
+        RETURNING id, username, email, phone, created_at, updated_at
+      `;
 
-      // Return the created user without password
-      const user = await this.findById(insertId);
-      if (!user) {
-        throw new Error('Failed to retrieve created user');
-      }
-
-      //Object destructuring dengan rest operator ... 
-      const { password: _, ...userWithoutPassword } = user;
-      return userWithoutPassword;
+      return user as Omit<User, 'password'>;
     } catch (error: any) {
-      if (error.code === 'ER_DUP_ENTRY') {
-        if (error.message.includes('username')) {
+      // PostgreSQL unique violation error code = 23505
+      if (error.code === '23505') {
+        if (error.constraint_name?.includes('username') || error.detail?.includes('username')) {
           throw new Error('Username already exists');
-        } else if (error.message.includes('email')) {
+        } else if (error.constraint_name?.includes('email') || error.detail?.includes('email')) {
           throw new Error('Email already exists');
         }
+        throw new Error('Username or Email already exists');
       }
       throw error;
     }
   }
 
-  //query untuk mencari user berdasarkan email, id, atau username
+  //query untuk mencari user berdasarkan email
   static async findByEmail(email: string): Promise<User | null> {
-    const query = 'SELECT * FROM users WHERE email = ?';
-
     try {
-      const [rows] = await pool.execute(query, [email]);
-      const users = rows as User[];
-      return users.length > 0 ? users[0] : null;
+      const users = await sql`SELECT * FROM users WHERE email = ${email}`;
+      return users.length > 0 ? (users[0] as unknown as User) : null;
     } catch (error) {
       throw error;
     }
@@ -61,12 +48,9 @@ export class UserModel {
 
   //query untuk mencari userID
   static async findById(id: number): Promise<User | null> {
-    const query = 'SELECT * FROM users WHERE id = ?';
-
     try {
-      const [rows] = await pool.execute(query, [id]);
-      const users = rows as User[];
-      return users.length > 0 ? users[0] : null;
+      const users = await sql`SELECT * FROM users WHERE id = ${id}`;
+      return users.length > 0 ? (users[0] as unknown as User) : null;
     } catch (error) {
       throw error;
     }
@@ -74,12 +58,9 @@ export class UserModel {
 
   //cari semua by username
   static async findByUsername(username: string): Promise<User | null> {
-    const query = 'SELECT * FROM users WHERE username = ?';
-
     try {
-      const [rows] = await pool.execute(query, [username]);
-      const users = rows as User[];
-      return users.length > 0 ? users[0] : null;
+      const users = await sql`SELECT * FROM users WHERE username = ${username}`;
+      return users.length > 0 ? (users[0] as unknown as User) : null;
     } catch (error) {
       throw error;
     }
