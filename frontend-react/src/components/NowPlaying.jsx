@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getNowPlayingMovies, getPosterUrl, getBackdropUrl, formatDate } from '../services/movieService';
+import { getNowPlayingMovies, getPosterUrl, formatDate } from '../services/movieService';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 
@@ -7,7 +7,6 @@ const NowPlaying = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -28,163 +27,23 @@ const NowPlaying = () => {
   }, []);
 
   const navigate = useNavigate();
-  
-  const handleMovieClick = (movie) => {
-    // Navigate to movie detail page
-    navigate(`/movie/${movie.id}`);
-  };
 
-  const closeModal = () => {
-    setSelectedMovie(null);
+  const handleMovieClick = (movie) => {
+    navigate(`/movie/${movie.id}`);
   };
 
   if (loading) {
     return (
       <>
         <Navbar />
-        <main className="container" style={{ padding: '2rem', minHeight: '80vh' }}>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '60vh',
-            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-            borderRadius: '20px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-            position: 'relative',
-            overflow: 'hidden',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            {/* Animated background elements */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'radial-gradient(circle at 20% 80%, rgba(100, 181, 246, 0.1) 0%, transparent 50%)',
-            }}></div>
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'radial-gradient(circle at 80% 20%, rgba(100, 181, 246, 0.1) 0%, transparent 50%)',
-            }}></div>
-            
-            {/* Loading content */}
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 10,
-              padding: '2rem',
-              textAlign: 'center'
-            }}>
-              {/* Enhanced spinner */}
-              <div style={{
-                width: '60px',
-                height: '60px',
-                position: 'relative',
-                marginBottom: '1.5rem'
-              }}>
-                <div style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '50%',
-                  border: '4px solid rgba(255, 255, 255, 0.1)',
-                  borderTop: '4px solid #64b5f6',
-                  animation: 'spin 1s linear infinite'
-                }}></div>
-                <div style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '50%',
-                  border: '4px solid transparent',
-                  borderBottom: '4px solid rgba(100, 181, 246, 0.3)',
-                  animation: 'spin 1.5s linear infinite reverse'
-                }}></div>
-              </div>
-              
-              {/* Loading text with animation */}
-              <h3 style={{
-                color: 'white',
-                fontSize: '1.5rem',
-                fontWeight: '600',
-                margin: '0 0 1rem 0',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-                letterSpacing: '0.5px'
-              }}>
-                Loading Movies
-              </h3>
-              
-              <p style={{
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontSize: '1rem',
-                margin: 0,
-                maxWidth: '300px',
-                lineHeight: '1.5'
-              }}>
-                Please wait while we fetch the latest movies for you...
-              </p>
-              
-              {/* Loading dots animation */}
-              <div style={{
-                display: 'flex',
-                gap: '0.5rem',
-                marginTop: '1.5rem'
-              }}>
-                <div style={{
-                  width: '10px',
-                  height: '10px',
-                  borderRadius: '50%',
-                  backgroundColor: '#64b5f6',
-                  animation: 'pulse 1.4s ease-in-out infinite both'
-                }}></div>
-                <div style={{
-                  width: '10px',
-                  height: '10px',
-                  borderRadius: '50%',
-                  backgroundColor: '#64b5f6',
-                  animation: 'pulse 1.4s ease-in-out infinite both',
-                  animationDelay: '0.2s'
-                }}></div>
-                <div style={{
-                  width: '10px',
-                  height: '10px',
-                  borderRadius: '50%',
-                  backgroundColor: '#64b5f6',
-                  animation: 'pulse 1.4s ease-in-out infinite both',
-                  animationDelay: '0.4s'
-                }}></div>
-              </div>
-            </div>
-            
-            {/* Add keyframes for animations */}
-            <style jsx>{`
-              @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-              }
-              
-              @keyframes pulse {
-                0%, 80%, 100% {
-                  transform: scale(0);
-                  opacity: 0.5;
-                }
-                40% {
-                  transform: scale(1);
-                  opacity: 1;
-                }
-              }
-            `}</style>
+        <main className="np-page">
+          <div className="np-loading-card">
+            <div className="np-spinner"></div>
+            <h3>Loading Movies</h3>
+            <p>Fetching the latest now playing movies...</p>
           </div>
         </main>
+        <style>{npStyles}</style>
       </>
     );
   }
@@ -193,19 +52,17 @@ const NowPlaying = () => {
     return (
       <>
         <Navbar />
-        <main className="container" style={{ padding: '2rem' }}>
-          <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
+        <main className="np-page">
+          <div className="np-error-card">
+            <div className="np-error-icon">⚠️</div>
             <h2>Error</h2>
             <p>{error}</p>
-            <button
-              className="btn btn-primary"
-              onClick={() => window.location.reload()}
-              style={{ marginTop: '1rem' }}
-            >
+            <button className="np-retry-btn" onClick={() => window.location.reload()}>
               Try Again
             </button>
           </div>
         </main>
+        <style>{npStyles}</style>
       </>
     );
   }
@@ -213,169 +70,264 @@ const NowPlaying = () => {
   return (
     <>
       <Navbar />
-      <main style={{ padding: '2rem 1rem', width: '100%', maxWidth: '100%' }}>
-        <h1 style={{ marginBottom: '2rem', textAlign: 'center' }}>Now Playing Movies</h1>
-      
-      {movies.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
-          <h2>No Movies Available</h2>
-          <p>There are currently no movies playing in theaters.</p>
-        </div>
-      ) : (
-        <div className="movie-grid" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
-          gap: '1rem',
-          marginBottom: '2rem',
-          padding: '0 0.5rem'
-        }}>
-          {movies.map((movie) => (
-            <div 
-              key={movie.id} 
-              className="movie-card"
-              onClick={() => handleMovieClick(movie)}
-              style={{
-                cursor: 'pointer',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                backgroundColor: '#fff'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-              }}
-            >
-              <div style={{ position: 'relative', paddingBottom: '150%' }}>
-                <img 
-                  src={getPosterUrl(movie.poster_path)} 
-                  alt={movie.title}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                />
-              </div>
-              <div style={{ padding: '1rem' }}>
-                <h3 style={{ 
-                  margin: '0 0 0.5rem 0', 
-                  fontSize: '1rem',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}>
-                  {movie.title}
-                </h3>
-                <p style={{ 
-                  margin: '0', 
-                  color: '#666', 
-                  fontSize: '0.875rem',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
-                  <span>{formatDate(movie.release_date)}</span>
-                  <span style={{ 
-                    backgroundColor: '#f0f0f0', 
-                    padding: '0.25rem 0.5rem', 
-                    borderRadius: '4px',
-                    fontSize: '0.75rem'
-                  }}>
-                    Popularity: {Math.round(movie.popularity)}
-                  </span>
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      <main className="np-page">
+        <h1 className="np-title">Now Playing Movies</h1>
 
-      {/* Movie Detail Modal */}
-      {selectedMovie && (
-        <div 
-          className="modal-overlay"
-          onClick={closeModal}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000,
-            padding: '1rem'
-          }}
-        >
-          <div 
-            className="modal-content"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: '8px',
-              maxWidth: '800px',
-              width: '100%',
-              maxHeight: '90vh',
-              overflow: 'auto',
-              position: 'relative'
-            }}
-          >
-            <button 
-              onClick={closeModal}
-              style={{
-                position: 'absolute',
-                top: '1rem',
-                right: '1rem',
-                background: 'none',
-                border: 'none',
-                fontSize: '1.5rem',
-                cursor: 'pointer',
-                zIndex: 1001
-              }}
-            >
-              ×
-            </button>
-            
-            <div style={{ position: 'relative', paddingBottom: '40%' }}>
-              <img 
-                src={getBackdropUrl(selectedMovie.backdrop_path)} 
-                alt={selectedMovie.title}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
-              />
-            </div>
-            
-            <div style={{ padding: '2rem' }}>
-              <h2 style={{ margin: '0 0 1rem 0' }}>{selectedMovie.title}</h2>
-              <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                <p><strong>Release Date:</strong> {formatDate(selectedMovie.release_date)}</p>
-                <p><strong>Popularity:</strong> {Math.round(selectedMovie.popularity)}</p>
-              </div>
-              <p><strong>Movie ID:</strong> {selectedMovie.id}</p>
-            </div>
+        {movies.length === 0 ? (
+          <div className="np-error-card">
+            <h2>No Movies Available</h2>
+            <p>There are currently no movies playing in theaters.</p>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="np-grid">
+            {movies.map((movie) => (
+              <div
+                key={movie.id}
+                className="np-card"
+                onClick={() => handleMovieClick(movie)}
+              >
+                <div className="np-card-poster">
+                  <img src={getPosterUrl(movie.poster_path)} alt={movie.title} />
+                  <div className="np-card-overlay">
+                    <span className="np-card-view">View Details</span>
+                  </div>
+                </div>
+                <div className="np-card-info">
+                  <h3>{movie.title}</h3>
+                  <div className="np-card-meta">
+                    <span className="np-card-date">{formatDate(movie.release_date)}</span>
+                    <span className="np-card-pop">⭐ {Math.round(movie.popularity)}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
+      <style>{npStyles}</style>
     </>
   );
 };
+
+const npStyles = `
+  .np-page {
+    min-height: calc(100vh - 70px);
+    padding: 2rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #6b8dd6 100%);
+    background-size: 200% 200%;
+    animation: npGradient 12s ease infinite;
+  }
+
+  @keyframes npGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .np-title {
+    text-align: center;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 2rem;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .np-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .np-card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .np-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35);
+  }
+
+  .np-card-poster {
+    position: relative;
+    padding-bottom: 150%;
+    overflow: hidden;
+  }
+
+  .np-card-poster img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .np-card:hover .np-card-poster img {
+    transform: scale(1.05);
+  }
+
+  .np-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 26, 46, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .np-card:hover .np-card-overlay {
+    opacity: 1;
+  }
+
+  .np-card-view {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .np-card-info {
+    padding: 0.9rem;
+  }
+
+  .np-card-info h3 {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .np-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .np-card-date {
+    font-size: 0.75rem;
+    color: #888;
+  }
+
+  .np-card-pop {
+    font-size: 0.72rem;
+    color: #667eea;
+    font-weight: 600;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+  }
+
+  /* Loading & Error */
+  .np-loading-card, .np-error-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    max-width: 420px;
+    margin: 3rem auto 0;
+  }
+
+  .np-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #eef0f6;
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: npSpin 0.8s linear infinite;
+    margin: 0 auto 1.5rem;
+  }
+
+  @keyframes npSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  .np-loading-card h3, .np-error-card h2 {
+    color: #1a1a2e;
+    margin: 0 0 0.5rem;
+  }
+
+  .np-loading-card p, .np-error-card p {
+    color: #888;
+    margin: 0 0 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .np-error-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .np-retry-btn {
+    padding: 0.7rem 1.8rem;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .np-retry-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .np-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .np-title {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .np-page {
+      padding: 1.5rem 0.75rem;
+    }
+
+    .np-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+    }
+
+    .np-title {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .np-card-info {
+      padding: 0.7rem;
+    }
+
+    .np-card-info h3 {
+      font-size: 0.82rem;
+    }
+  }
+`;
 
 export default NowPlaying;
