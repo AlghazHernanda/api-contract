@@ -600,7 +600,7 @@ const movieDetailStyles = `
   }
 
   /* Tablet */
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .md-backdrop {
       height: 260px;
     }
@@ -612,27 +612,44 @@ const movieDetailStyles = `
     }
 
     .md-backdrop-title h1 {
-      font-size: 1.7rem;
+      font-size: 1.6rem;
     }
 
     .md-tagline {
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
+    /* Stack: poster on top (in flow, no overlap), details below */
     .md-content {
       flex-direction: column;
       padding: 1.5rem;
-      gap: 1rem;
+      gap: 1.2rem;
+      align-items: center;
     }
 
     .md-poster {
       flex: none;
-      max-width: 180px;
-      margin: -70px auto 0;
+      width: 100%;
+      max-width: 200px;
     }
 
+    /* Remove the desktop overlap so poster never covers the title */
     .md-poster img {
       margin-top: 0;
+    }
+
+    .md-details {
+      width: 100%;
+    }
+
+    .md-scroll-btn {
+      width: 38px;
+      height: 38px;
+      font-size: 1.3rem;
+    }
+
+    .md-cast-scroll {
+      padding: 0.5rem 1.5rem;
     }
   }
 
@@ -642,28 +659,110 @@ const movieDetailStyles = `
     }
 
     .md-backdrop {
-      height: 200px;
+      height: 190px;
     }
 
     .md-backdrop-title h1 {
-      font-size: 1.4rem;
+      font-size: 1.25rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .md-tagline {
+      font-size: 0.85rem;
     }
 
     .md-content {
-      padding: 1.2rem;
+      padding: 1.2rem 1rem;
+    }
+
+    .md-poster {
+      max-width: 165px;
+    }
+
+    .md-overview {
+      padding: 1.1rem;
+    }
+
+    .md-section-head h2 {
+      font-size: 1.15rem;
+    }
+
+    .md-overview p {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      text-align: left;
     }
 
     .md-info-grid {
       grid-template-columns: 1fr;
+      gap: 0.7rem;
     }
 
-    .md-cast-head, .md-cast-count {
-      margin-left: 1rem;
-      margin-right: 1rem;
+    .md-info-item {
+      padding: 0.9rem;
+    }
+
+    .md-info-value {
+      font-size: 0.98rem;
+    }
+
+    .md-info-link {
+      font-size: 0.85rem;
+    }
+
+    /* Cast: header stays flush inside the card */
+    .md-cast-head {
+      padding: 1.1rem 1.2rem;
+    }
+
+    .md-cast-head h2 {
+      font-size: 1.2rem;
+    }
+
+    .md-cast-slider-wrap {
+      padding: 1.2rem 0.5rem;
     }
 
     .md-cast-scroll {
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 0.75rem;
+      gap: 0.8rem;
+    }
+
+    .md-cast-item {
+      flex: 0 0 120px;
+    }
+
+    .md-cast-item img {
+      height: 165px;
+    }
+
+    .md-cast-item h4 {
+      font-size: 0.82rem;
+    }
+
+    .md-cast-item p {
+      font-size: 0.74rem;
+    }
+
+    /* Scroll buttons smaller and semi-transparent so they don't block cards */
+    .md-scroll-btn {
+      width: 32px;
+      height: 32px;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .md-scroll-left { left: 2px; }
+    .md-scroll-right { right: 2px; }
+
+    .md-cast-count {
+      margin: 0 1.2rem 1.2rem;
+      font-size: 0.8rem;
+    }
+
+    .md-back-btn {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.85rem;
     }
   }
 `;
