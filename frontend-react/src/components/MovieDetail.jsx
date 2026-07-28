@@ -284,6 +284,8 @@ const movieDetailStyles = `
     right: 2rem;
     color: #fff;
     z-index: 2;
+    /* Align text with the details column so the overlapping poster never covers it */
+    padding-left: calc(260px + 2rem);
   }
 
   .md-backdrop-title h1 {
@@ -609,6 +611,8 @@ const movieDetailStyles = `
       left: 1.2rem;
       right: 1.2rem;
       bottom: 1.2rem;
+      /* Poster is stacked below on mobile, so text can span full width */
+      padding-left: 0;
     }
 
     .md-backdrop-title h1 {
