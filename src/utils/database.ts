@@ -57,6 +57,30 @@ export async function initializeDatabase(): Promise<void> {
       )
     `;
 
+    // Create reviews table (satu tabel untuk movie dan tv, dibedakan media_type)
+    // media_id sengaja tanpa foreign key karena serial TV tidak punya baris di movies
+    await sql`
+      CREATE TABLE IF NOT EXISTS reviews (
+        id SERIAL PRIMARY KEY,
+        user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        media_type VARCHAR(10) NOT NULL,
+        media_id INT NOT NULL,
+        rating SMALLINT NOT NULL,
+        comment VARCHAR(1000),
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW(),
+        CONSTRAINT reviews_media_type_check CHECK (media_type IN ('movie', 'tv')),
+        CONSTRAINT reviews_media_id_check CHECK (media_id > 0),
+        CONSTRAINT reviews_rating_check CHECK (rating BETWEEN 1 AND 10),
+        CONSTRAINT reviews_user_media_key UNIQUE (user_id, media_type, media_id)
+      )
+    `;
+
+    // Index pendukung query daftar dan agregat per item media
+    await sql`
+      CREATE INDEX IF NOT EXISTS idx_reviews_media ON reviews (media_type, media_id)
+    `;
+
     // Buat function untuk auto-update updated_at (pengganti ON UPDATE CURRENT_TIMESTAMP di MySQL)
     await sql`
       CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -100,7 +124,23 @@ export async function initializeDatabase(): Promise<void> {
       $$
     `;
 
-    console.log('Users and Movies tables created successfully');
+    // Trigger untuk reviews table (buat hanya jika belum ada)
+    await sql`
+      DO $$
+      BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM pg_trigger WHERE tgname = 'update_reviews_updated_at'
+        ) THEN
+          CREATE TRIGGER update_reviews_updated_at
+            BEFORE UPDATE ON reviews
+            FOR EACH ROW
+            EXECUTE FUNCTION update_updated_at_column();
+        END IF;
+      END
+      $$
+    `;
+
+    console.log('Users, Movies, and Reviews tables created successfully');
     console.log('Database initialized successfully');
   } catch (error) {
     console.error('Database initialization failed:', error);

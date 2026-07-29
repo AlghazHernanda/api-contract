@@ -24,8 +24,8 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - Setiap field bertipe eksplisit, tanpa tipe `any`
     - _Requirements: 11.3_
 
-- [-] 2. Migrasi skema tabel reviews
-  - [ ] 2.1 Tambahkan pembuatan objek database review pada `initializeDatabase`
+- [x] 2. Migrasi skema tabel reviews
+  - [x] 2.1 Tambahkan pembuatan objek database review pada `initializeDatabase`
     - Pada `src/utils/database.ts`: `CREATE TABLE IF NOT EXISTS reviews` dengan `user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE`, `media_type VARCHAR(10)`, `media_id INT` (tanpa foreign key), `rating SMALLINT`, `comment VARCHAR(1000)`, default `NOW()` pada `created_at`/`updated_at`
     - Tambahkan `CHECK` media_type, `CHECK media_id > 0`, `CHECK rating BETWEEN 1 AND 10`, dan `UNIQUE (user_id, media_type, media_id)`
     - Tambahkan `CREATE INDEX IF NOT EXISTS idx_reviews_media`, dan trigger `update_reviews_updated_at` melalui pemeriksaan `pg_trigger` mengikuti pola trigger `users`/`movies`
