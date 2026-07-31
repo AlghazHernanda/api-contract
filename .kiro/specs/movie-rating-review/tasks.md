@@ -49,15 +49,15 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - **Property 1: Payload sah selalu diterima dan diteruskan apa adanya**
     - **Validates: Requirements 3.1**
 
-  - [ ]* 3.3 Tulis property test normalisasi komentar
+  - [x] 3.3 Tulis property test normalisasi komentar
     - **Property 3: Normalisasi komentar memangkas ujung dan mengubah komentar kosong menjadi null**
     - **Validates: Requirements 3.6, 3.7**
 
-  - [ ]* 3.4 Tulis property test parsing parameter query
+  - [x] 3.4 Tulis property test parsing parameter query
     - **Property 8: Parsing parameter query menerapkan nilai bawaan dan menolak nilai di luar rentang**
     - **Validates: Requirements 6.6, 7.4, 7.6**
 
-  - [ ]* 3.5 Tulis unit test kasus batas validator
+  - [x] 3.5 Tulis unit test kasus batas validator
     - Rating 0, 11, dan desimal; `media_id` 1 dan 2147483647; komentar 0, 1, 1000, dan 1001 karakter; komentar berisi whitespace unicode, emoji, kutip tunggal, dan `--`; `limit` 1, 10, 50, 51; `offset` 0 dan 999999999
     - _Requirements: 3.2, 3.3, 3.4, 3.5, 7.5_
 
