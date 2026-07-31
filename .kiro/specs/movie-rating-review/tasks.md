@@ -180,8 +180,8 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - **Property 15: Pembatasan dan pencacahan teks pada modal**
     - **Validates: Requirements 1.4, 2.6, 2.7, 2.8**
 
-- [ ] 11. Implementasi Rating_Modal
-  - [ ] 11.1 Buat struktur `RatingModal.jsx` dengan kontrol bintang dan kolom komentar
+- [x] 11. Implementasi Rating_Modal
+  - [x] 11.1 Buat struktur `RatingModal.jsx` dengan kontrol bintang dan kolom komentar
     - 10 kontrol bintang urut naik, penandaan 1..N terpilih, teks `N/10`, penanda saat rating belum dipilih
     - Kolom komentar dengan pembatasan 1000 karakter dan pencacah karakter; tombol simpan nonaktif hingga rating ditetapkan
     - Judul Media_Item ditampilkan melalui `formatTitle`
@@ -191,7 +191,7 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - **Property 14: State kontrol bintang dan keaktifan tombol simpan konsisten**
     - **Validates: Requirements 2.2, 2.3, 2.4, 2.9, 2.10, 2.11**
 
-  - [ ] 11.3 Implementasi pramuat review sendiri pada modal
+  - [x] 11.3 Implementasi pramuat review sendiri pada modal
     - Kirim tepat satu permintaan pramuat saat modal dibuka; nonaktifkan 10 kontrol bintang, kolom komentar, dan tombol simpan selama proses
     - Petakan respons berisi review ke rating aktif, isi komentar, pencacah, dan label aksi pembaruan; respons null ke form kosong berlabel aksi pembuatan
     - Kegagalan/batas waktu 10 detik → form kosong mode pembuatan, pesan pramuat gagal, dan aksi ulangi
@@ -201,7 +201,7 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - **Property 16: Respons pramuat dipetakan tepat ke state modal**
     - **Validates: Requirements 8.1, 8.2, 8.5, 8.7, 8.8**
 
-  - [ ] 11.5 Implementasi alur simpan beserta penanganan kegagalan
+  - [x] 11.5 Implementasi alur simpan beserta penanganan kegagalan
     - Paling banyak satu permintaan simpan aktif, tombol simpan dan aksi hapus nonaktif selama proses, indikator proses pada area tombol
     - Sukses 200/201 → notifikasi keberhasilan dan penutupan otomatis ≤ 2 detik
     - Kegagalan per kelas (400–499 selain 401, 401 dengan tautan `/login`, 500–599, body tanpa `error`, jaringan, batas waktu 10 detik) mempertahankan rating dan komentar; aksi kirim ulang maksimal 3 kali dengan payload identik lalu pesan coba kembali nanti; area notifikasi maksimal 5 butir
@@ -219,7 +219,7 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - **Property 23: Kirim ulang mengirim payload identik dengan batas tiga percobaan**
     - **Validates: Requirements 10.8, 10.10, 10.11**
 
-  - [ ] 11.9 Implementasi alur hapus rating dengan konfirmasi
+  - [x] 11.9 Implementasi alur hapus rating dengan konfirmasi
     - Aksi hapus tampil aktif hanya ketika review pengguna ada; menekannya menampilkan konfirmasi dengan aksi konfirmasi dan batal tanpa mengirim permintaan
     - Konfirmasi mengirim permintaan hapus; sukses mengembalikan modal ke form kosong berlabel aksi pembuatan; kegagalan mempertahankan aksi hapus aktif beserta rating dan komentar
     - _Requirements: 9.1, 9.4, 9.6, 9.7, 9.8_
@@ -228,7 +228,7 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - **Property 24: Konfirmasi hapus menahan permintaan sampai dikonfirmasi**
     - **Validates: Requirements 9.1, 9.6, 9.7**
 
-  - [ ] 11.11 Implementasi jalur penutupan modal
+  - [x] 11.11 Implementasi jalur penutupan modal
     - Tombol tutup dan tombol Escape menyembunyikan modal, membuang masukan yang belum dikirim, tidak meminta ulang data detail, dan mengembalikan fokus keyboard ke Rating_Trigger
     - _Requirements: 1.5, 1.9_
 
@@ -240,7 +240,7 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - Tepat 10 kontrol bintang bernilai 1–10 urut naik; penanda tanpa angka saat rating belum dipilih; respons pramuat `data: null` → form kosong, label pembuatan, tombol simpan nonaktif
     - _Requirements: 2.1, 2.5, 8.3_
 
-- [ ] 12. Integrasi pada halaman detail
+- [-] 12. Integrasi pada halaman detail
   - [ ] 12.1 Implementasi hook `frontend-react/src/hooks/useReviewData.js`
     - State `summary`, `reviews`, `total`, `loading`, `error` dan aksi `refreshSummary`, `loadFirstPage` (`limit` 10, `offset` 0), `loadMore` (`offset` = jumlah yang sudah dimuat), `refreshAll`
     - _Requirements: 6.9, 6.10, 7.1, 7.12, 9.4_
