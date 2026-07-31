@@ -32,20 +32,20 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - Pertahankan perilaku throw error ke pemanggil pada kegagalan
     - _Requirements: 3.8, 5.9, 9.5, 11.5, 11.6, 11.7, 11.9, 11.10_
 
-  - [ ]* 2.2 Tulis integration test skema dan idempotensi migrasi
+  - [x] 2.2 Tulis integration test skema dan idempotensi migrasi
     - Verifikasi tabel, unique constraint, default timestamp, index, dan trigger terbentuk
     - Jalankan `initializeDatabase` 3 kali berturut-turut tanpa error, tanpa duplikat objek, data review tetap utuh
     - Verifikasi constraint menolak rating 0, 11, dan desimal tanpa mengubah isi tabel
     - Verifikasi `DELETE` baris `users` menghapus review `movie` dan `tv` milik pengguna tersebut
     - _Requirements: 3.8, 9.5, 11.5, 11.6, 11.7, 11.9, 11.10_
 
-- [ ] 3. Implementasi validator murni
-  - [ ] 3.1 Implementasi `src/utils/reviewValidation.ts`
+- [x] 3. Implementasi validator murni
+  - [x] 3.1 Implementasi `src/utils/reviewValidation.ts`
     - Ekspor konstanta batas (`COMMENT_MAX_LENGTH`, `MEDIA_ID_MAX`, `LIMIT_MIN/MAX`, `OFFSET_MAX`, `DEFAULT_LIMIT`, `DEFAULT_OFFSET`) dan tipe `ValidationError`/`ValidationResult<T>`
     - Implementasi `normalizeComment`, `validateCreateReviewPayload`, `validateMediaParams`, `validateListParams` sebagai fungsi murni yang mengumpulkan satu entri kesalahan per field gagal dan mengabaikan field asing termasuk identifier pengguna
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.10, 4.3, 6.6, 7.4, 7.5, 7.6_
 
-  - [ ]* 3.2 Tulis property test payload sah diteruskan apa adanya
+  - [x] 3.2 Tulis property test payload sah diteruskan apa adanya
     - **Property 1: Payload sah selalu diterima dan diteruskan apa adanya**
     - **Validates: Requirements 3.1**
 
