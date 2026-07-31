@@ -61,17 +61,17 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - Rating 0, 11, dan desimal; `media_id` 1 dan 2147483647; komentar 0, 1, 1000, dan 1001 karakter; komentar berisi whitespace unicode, emoji, kutip tunggal, dan `--`; `limit` 1, 10, 50, 51; `offset` 0 dan 999999999
     - _Requirements: 3.2, 3.3, 3.4, 3.5, 7.5_
 
-- [ ] 4. Checkpoint - validator dan skema
+- [x] 4. Checkpoint - validator dan skema
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. Implementasi Review_Model
-  - [ ] 5.1 Implementasi `src/models/Review.ts`
+- [x] 5. Implementasi Review_Model
+  - [x] 5.1 Implementasi `src/models/Review.ts`
     - Static class `ReviewModel` dengan `upsert` (`INSERT ... ON CONFLICT (user_id, media_type, media_id) DO UPDATE ... RETURNING ..., (xmax = 0) AS was_inserted`), `findByUserAndMedia`, `getSummary` (`ROUND(AVG(rating)::numeric, 1)` + `COUNT(*)::int`), `listByMedia` (query `COUNT(*)` terpisah + query halaman dengan `ORDER BY updated_at DESC, created_at DESC, id DESC`), `deleteByUserAndMedia`, `findById`, `deleteById`
     - Query hanya memilih `username` dari `users` melalui `INNER JOIN`, tanpa kolom `password` maupun `email`
     - Seluruh nilai input disisipkan sebagai parameter tagged template `sql`
     - _Requirements: 5.1, 5.3, 5.5, 5.6, 5.8, 5.9, 6.2, 6.3, 6.4, 7.2, 7.3, 7.7, 7.8, 7.9, 11.1, 11.2_
 
-  - [ ] 5.2 Buat fake in-memory ReviewModel untuk property test
+  - [x] 5.2 Buat fake in-memory ReviewModel untuk property test
     - Modul uji yang menerapkan semantik unique constraint `(user_id, media_type, media_id)`, penetapan `created_at`/`updated_at`, urutan daftar, agregat, dan penghapusan, dengan antarmuka identik `ReviewModel`
     - _Requirements: 5.5, 6.2, 7.3_
 
