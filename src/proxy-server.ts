@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 // import axios from 'axios';
@@ -7,6 +7,7 @@ import movieRoutes from './routes/movieRoutes';
 import { testConnection } from './utils/database';
 // Database sekarang menggunakan Supabase PostgreSQL via postgres.js
 import tvListRoutes from './routes/tvListRoutes';
+import reviewRoutes from './routes/reviewRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -86,12 +87,24 @@ app.use(express.json());
 // Proxy endpoint
 app.use('/api/movie_core', movieRoutes);
 app.use('/api/tv_series_core', tvListRoutes);
+// Rating_API: satu-satunya prefix review pada Proxy_Server (Req 11.4)
+app.use('/api/reviews', reviewRoutes);
 
 
 
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', service: 'API Proxy' });
+});
+
+// Handler khusus body JSON yang tidak dapat diurai (Req 3.11)
+// Terdaftar setelah seluruh route agar Express mengenalinya sebagai error middleware
+app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
+  if (err instanceof SyntaxError && 'body' in err) {
+    res.status(400).json({ error: 'Request body must be valid JSON' });
+    return;
+  }
+  next(err);
 });
 
 // Start server
@@ -119,6 +132,12 @@ async function startProxyServer() {
       console.log('  GET  /api/movie_core/showFavoriteMovies - Get movies ordered by favorite count');
       console.log('  GET  /api/tv_series_core/airing_today - Get TV series airing today');
       console.log('  GET  /api/tv_series_core/detail/:id - Get TV series details');
+      console.log('  GET  /api/reviews/summary - Get rating summary for a media item');
+      console.log('  GET  /api/reviews - List reviews for a media item');
+      console.log('  GET  /api/reviews/me - Get own review (auth)');
+      console.log('  POST /api/reviews - Create or update own review (auth)');
+      console.log('  DEL  /api/reviews - Delete own review (auth)');
+      console.log('  DEL  /api/reviews/:id - Delete review by id, owner only (auth)');
       console.log('  GET  /health - Health check');
       console.log('\n🔗 Movie data will be automatically saved to database when accessing detail endpoint');
       console.log('📈 Favorite count increments each time a movie detail is accessed');

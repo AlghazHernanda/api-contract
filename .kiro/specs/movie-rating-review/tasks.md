@@ -101,19 +101,19 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - Simpan Review_Record `media_type` `tv` dengan `media_id` yang tidak ada pada tabel `movies`
     - _Requirements: 5.6, 5.8, 5.9_
 
-- [ ] 6. Implementasi controller, routes, dan pendaftaran endpoint
-  - [ ] 6.1 Implementasi `src/controllers/reviewController.ts`
+- [x] 6. Implementasi controller, routes, dan pendaftaran endpoint
+  - [x] 6.1 Implementasi `src/controllers/reviewController.ts`
     - Handler `upsertReviewHandler` (201 baru / 200 pembaruan), `getMyReviewHandler` (`data: null` bila belum ada), `getRatingSummaryHandler`, `getReviewListHandler` (`total`, `limit`, `offset`, `count`), `deleteMyReviewHandler` (404 bila tidak ada), `deleteReviewByIdHandler` (403 bukan pemilik, 404 tidak ada)
     - Pemilik selalu dari `req.user.id`; validasi gagal merespons 400 `{ error, details }` tanpa memanggil model; catch merespons 500 dengan pesan generik dan `console.error`
     - Tanpa pernyataan SQL di lapisan ini
     - _Requirements: 3.9, 3.10, 4.3, 4.5, 5.2, 5.4, 5.8, 6.1, 6.5, 6.6, 7.6, 8.9, 9.2, 9.3, 10.6, 11.1, 11.8, 11.11_
 
-  - [ ] 6.2 Implementasi `src/routes/reviewRoutes.ts`
+  - [x] 6.2 Implementasi `src/routes/reviewRoutes.ts`
     - Route publik `GET /summary` dan `GET /`; route terproteksi `GET /me`, `POST /`, `DELETE /`, `DELETE /:id` dengan `authenticateToken` sebelum handler
     - Daftarkan `/summary` dan `/me` sebelum `/:id`; tanpa SQL maupun logika validasi
     - _Requirements: 4.1, 4.4_
 
-  - [ ] 6.3 Daftarkan Rating_API pada Proxy_Server
+  - [x] 6.3 Daftarkan Rating_API pada Proxy_Server
     - `app.use('/api/reviews', reviewRoutes)` pada `src/proxy-server.ts` sebagai satu-satunya prefix review
     - Tambahkan error middleware yang merespons 400 `{ error: 'Request body must be valid JSON' }` untuk `SyntaxError` body JSON
     - _Requirements: 3.11, 11.4_
@@ -144,7 +144,7 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - Path review di luar prefix `/api/reviews` menghasilkan 404
     - _Requirements: 3.11, 11.1, 11.4_
 
-- [ ] 7. Checkpoint - backend Rating_API
+- [x] 7. Checkpoint - backend Rating_API
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 8. Tambahkan skor TheMovieDB pada response detail
