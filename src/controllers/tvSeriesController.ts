@@ -31,6 +31,7 @@ export function modifyTvSeriesDetailResponse(originalData: any): tvSeriesDetailT
         first_air_date: originalData.first_air_date,
         poster_path: originalData.poster_path,
         backdrop_path: originalData.backdrop_path,
+        vote_average: originalData.vote_average,
         homepage: originalData.homepage,
         tagline: originalData.tagline
     }

@@ -14,6 +14,7 @@ export interface tvSeriesDetailTypes {
   first_air_date: string;
   poster_path: string;
   backdrop_path: string;
+  vote_average: number;
   homepage?: string;
   tagline?: string;
 }

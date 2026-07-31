@@ -6,6 +6,7 @@ export interface ModifyMovieTypes {
   poster_path: string;
   budget: number;
   revenue: number;
+  vote_average: number;
   backdrop_path?: string;
   homepage?: string;
   tagline?: string;

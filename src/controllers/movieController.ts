@@ -21,6 +21,7 @@ export function modifyMovieResponse(originalData: any): ModifyMovieTypes {
     poster_path: originalData.poster_path,
     budget: originalData.budget,
     revenue: originalData.revenue,
+    vote_average: originalData.vote_average,
     backdrop_path: originalData.backdrop_path,
     homepage: originalData.homepage,
     tagline: originalData.tagline

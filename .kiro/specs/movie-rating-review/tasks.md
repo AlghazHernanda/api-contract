@@ -147,12 +147,12 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
 - [x] 7. Checkpoint - backend Rating_API
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 8. Tambahkan skor TheMovieDB pada response detail
-  - [ ] 8.1 Tambahkan `vote_average` pada transformer detail film
+- [x] 8. Tambahkan skor TheMovieDB pada response detail
+  - [x] 8.1 Tambahkan `vote_average` pada transformer detail film
     - Tambahkan field pada `ModifyMovieTypes` di `src/types/modifyMovie.ts` dan pada `modifyMovieResponse` di `src/controllers/movieController.ts`
     - _Requirements: 6.7, 6.8_
 
-  - [ ] 8.2 Tambahkan `vote_average` pada transformer detail serial TV
+  - [x] 8.2 Tambahkan `vote_average` pada transformer detail serial TV
     - Tambahkan field pada tipe detail di `src/types/tvSeries.ts` dan pada transformer detail di `src/controllers/tvSeriesController.ts`
     - _Requirements: 6.7, 6.8_
 
