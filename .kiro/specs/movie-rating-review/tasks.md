@@ -156,14 +156,14 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - Tambahkan field pada tipe detail di `src/types/tvSeries.ts` dan pada transformer detail di `src/controllers/tvSeriesController.ts`
     - _Requirements: 6.7, 6.8_
 
-- [ ] 9. Implementasi service dan proxy frontend
-  - [ ] 9.1 Implementasi `frontend-react/src/services/reviewService.js`
+- [x] 9. Implementasi service dan proxy frontend
+  - [x] 9.1 Implementasi `frontend-react/src/services/reviewService.js`
     - Fungsi `getReviewSummary`, `getReviews`, `getMyReview`, `saveReview`, `deleteMyReview` dengan base URL `/api/reviews`
     - Header `Authorization: Bearer <token>` dari `authService` pada endpoint terproteksi
     - `AbortController` dengan batas 10 detik; error membawa `status` dan pesan dari field `error`, atau pesan umum bila body tidak memuat `error`/tidak dapat diurai
     - _Requirements: 8.1, 10.4, 10.5_
 
-  - [ ] 9.2 Tambahkan entri proxy `/api/reviews`
+  - [x] 9.2 Tambahkan entri proxy `/api/reviews`
     - Arahkan `/api/reviews` ke `http://localhost:3001` pada `frontend-react/vite.config.js`
     - _Requirements: 11.4_
 

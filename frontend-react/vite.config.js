@@ -17,6 +17,10 @@ export default defineConfig({
       '/api/tv_series_core': {
         target: 'http://localhost:3001',
         changeOrigin: true
+      },
+      '/api/reviews': {
+        target: 'http://localhost:3001',
+        changeOrigin: true
       }
     }
   }
