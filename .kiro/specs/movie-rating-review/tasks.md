@@ -171,8 +171,8 @@ Backend memakai TypeScript (`src/`), frontend memakai React 17 + JSX (`frontend-
     - Body error tanpa field `error`, body bukan JSON, dan batas waktu 10 detik menghasilkan error bertanda yang benar
     - _Requirements: 10.4, 10.5_
 
-- [ ] 10. Implementasi helper format murni frontend
-  - [ ] 10.1 Implementasi `frontend-react/src/utils/reviewFormat.js`
+- [x] 10. Implementasi helper format murni frontend
+  - [x] 10.1 Implementasi `frontend-react/src/utils/reviewFormat.js`
     - `clampComment` (batas keras 1000 karakter), `countCharacters`, `formatTitle` (pemotongan >120 karakter dengan indikator), `formatAverageRating` (format `N,N/10`)
     - _Requirements: 1.4, 2.6, 2.7, 2.8, 6.7_
 
